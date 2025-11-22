@@ -132,8 +132,6 @@ function exportOpsRationaleToMarkdown() {
     markdown += `### Focus: Risk Mitigation, Safety, and Law\n\n`;
     markdown += `In this tier, the cost of an error is not "lost time"—it is a lawsuit, an injury, or a regulatory fine. Documentation is not a "nice to have"; it is a legal shield.\n\n`;
     markdown += `### The Rule: If it isn't written down, it didn't happen\n\n`;
-    markdown += `#### Manufacturing (55%)\n\n`;
-    markdown += `Driven by ISO standards and physical safety. Every step must be traceable to prevent defects or injury.\n\n`;
     markdown += `#### Finance (60%)\n\n`;
     markdown += `Driven by Auditability. We document to prove to the government (and shareholders) that the money is real.\n\n`;
     markdown += `#### HR (65%)\n\n`;
