@@ -155,3 +155,104 @@ After deployment, verify:
 - **Operations Sheet** (`operations-sheet.html`) - Print-friendly operational sheet
 - **Ops Rationale** (`ops-rationale.html`) - TDR methodology explanation
 
+## Quick Reference
+
+### Local Development
+
+```bash
+# 1. Clone repository
+git clone <repository-url>
+cd Pigeon-Wheel
+
+# 2. Set up configuration
+cp js/config.example.js js/config.js
+# Edit js/config.js and set your password
+
+# 3. Start local server
+python3 -m http.server 8000 --bind 0.0.0.0
+
+# 4. Open browser
+# Navigate to http://localhost:8000/welcome.html
+```
+
+### Railway Deployment Checklist
+
+- [ ] Connect GitHub repository to Railway
+- [ ] Set `AUTH_PASSWORD` environment variable in Railway
+- [ ] Verify port auto-detection (should show 8080)
+- [ ] Deploy and check build logs for config generation
+- [ ] Test authentication on deployed site
+- [ ] Verify all pages load correctly
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `railway.json` | Railway deployment configuration |
+| `nixpacks.toml` | Build configuration (Nixpacks) |
+| `start.sh` | Server startup script |
+| `generate-config.js` | Generates `js/config.js` from env var during build |
+| `js/config.js` | Authentication password (gitignored, generated on Railway) |
+| `js/config.example.js` | Template for local development |
+| `js/auth.js` | Authentication logic |
+| `data/stages-data.json` | Centralized stage data |
+
+### Architecture
+
+- **Static Site:** HTML/CSS/JavaScript (no backend)
+- **Authentication:** Client-side password check with localStorage
+- **Data:** Centralized in `data/stages-data.json`
+- **Build:** Nixpacks (Python + Node.js)
+- **Server:** Python HTTP server (for static file serving)
+- **Deployment:** Railway (auto-deploy from GitHub)
+
+## Troubleshooting
+
+### Local Development Issues
+
+**Password not working locally:**
+- Ensure `js/config.js` exists (copy from `js/config.example.js`)
+- Check that password in `js/config.js` matches what you're entering
+- Clear browser localStorage: `localStorage.clear()` in browser console
+
+**Server won't start:**
+- Check if port 8000 is already in use
+- Try a different port: `python3 -m http.server 8080 --bind 0.0.0.0`
+
+### Railway Deployment Issues
+
+**502 Bad Gateway:**
+- Check that server binds to `0.0.0.0` (not `localhost`)
+- Verify `PORT` environment variable is being used
+- Check Railway logs for server startup messages
+
+**Authentication not working:**
+- Verify `AUTH_PASSWORD` is set in Railway Variables
+- Check build logs for: `✓ Generated js/config.js`
+- Ensure password matches exactly (case-sensitive)
+
+**Build fails:**
+- Check if `AUTH_PASSWORD` environment variable is set
+- Verify Node.js is available (should be installed by Nixpacks)
+- Check build logs for specific error messages
+
+**Port issues:**
+- Let Railway auto-detect the port (don't set custom port)
+- Default detected port is usually 8080 for Python
+- Server should use `$PORT` environment variable
+
+## Security Notes
+
+- `js/config.js` is gitignored and never committed to repository
+- On Railway, password is stored as environment variable (encrypted at rest)
+- Authentication is client-side only (suitable for basic access control)
+- For production use, consider implementing server-side authentication
+
+## Support
+
+For issues or questions:
+1. Check Railway build logs
+2. Check browser console for JavaScript errors
+3. Verify environment variables are set correctly
+4. Review this README's troubleshooting section
+
