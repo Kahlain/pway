@@ -3,7 +3,12 @@
  * Simple password-based authentication with localStorage session management
  */
 
-const AUTH_PASSWORD = 'pigeon2024';
+// Password is loaded from config.js (gitignored)
+// config.js must exist - if not, authentication will fail
+if (typeof CONFIG === 'undefined' || !CONFIG.AUTH_PASSWORD) {
+    console.error('Configuration file (js/config.js) is missing. Please create it from js/config.example.js');
+}
+const AUTH_PASSWORD = (typeof CONFIG !== 'undefined' && CONFIG.AUTH_PASSWORD) ? CONFIG.AUTH_PASSWORD : null;
 const AUTH_KEY = 'pigeon_authenticated';
 const AUTH_TIMESTAMP_KEY = 'pigeon_auth_timestamp';
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -39,6 +44,10 @@ function isAuthenticated() {
  * @returns {boolean} True if password is correct
  */
 function authenticate(password) {
+    if (!AUTH_PASSWORD) {
+        console.error('Authentication not configured. Please create js/config.js');
+        return false;
+    }
     if (password === AUTH_PASSWORD) {
         localStorage.setItem(AUTH_KEY, 'true');
         localStorage.setItem(AUTH_TIMESTAMP_KEY, Date.now().toString());

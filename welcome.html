@@ -18,6 +18,7 @@
         }
     </style>
     
+    <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
 </head>
 <body class="min-h-screen flex items-center justify-center p-8">
@@ -63,7 +64,7 @@
     <script>
         // Check if already authenticated
         if (window.isAuthenticated && window.isAuthenticated()) {
-            window.location.href = 'pigeon-way.html';
+            window.location.href = 'operations-sheet.html';
         }
         
         // Handle form submission
@@ -75,7 +76,7 @@
             
             if (window.authenticate && window.authenticate(password)) {
                 // Successful login
-                window.location.href = 'pigeon-way.html';
+                window.location.href = 'operations-sheet.html';
             } else {
                 // Show error
                 errorMessage.textContent = 'Incorrect password. Please try again.';

@@ -17,6 +17,9 @@ npm-debug.log*
 .env
 .env.local
 
+# Config (contains sensitive data)
+js/config.js
+
 # Build outputs (if any)
 dist/
 build/

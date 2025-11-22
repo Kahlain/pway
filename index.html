@@ -14,10 +14,10 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
         rel="stylesheet">
     <!-- Load authentication -->
+    <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
     <!-- Load shared utilities -->
     <script src="js/highlight-text.js"></script>
-    <script src="js/markdown-export.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/legend.js"></script>
     <script src="js/tdr-accordion.js"></script>
@@ -73,12 +73,17 @@
 
     <script>
         // Check authentication before loading page
-        if (typeof requireAuth === 'function') {
+        // If authenticated, redirect to operations sheet (homepage)
+        if (typeof isAuthenticated === 'function' && isAuthenticated()) {
+            window.location.href = 'operations-sheet.html';
+        } else if (typeof requireAuth === 'function') {
             requireAuth('welcome.html');
         } else {
             // Wait for auth.js to load
             window.addEventListener('load', function() {
-                if (typeof requireAuth === 'function') {
+                if (typeof isAuthenticated === 'function' && isAuthenticated()) {
+                    window.location.href = 'operations-sheet.html';
+                } else if (typeof requireAuth === 'function') {
                     requireAuth('welcome.html');
                 }
             });

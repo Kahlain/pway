@@ -18,14 +18,14 @@ function createNavigation(currentPage = '') {
                         ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : 'The Flying Wheel v 0.8'}
                     </div>
                     <nav class="flex items-center gap-3 text-xs">
-                        <a href="pigeon-way.html" 
-                           class="px-3 py-1 rounded transition-colors ${isFlyingWheel ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
-                            Flying Wheel
-                        </a>
-                        <span class="text-slate-300">|</span>
                         <a href="operations-sheet.html" 
                            class="px-3 py-1 rounded transition-colors ${isOperationsSheet ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
                             Operations Sheet
+                        </a>
+                        <span class="text-slate-300">|</span>
+                        <a href="pigeon-way.html" 
+                           class="px-3 py-1 rounded transition-colors ${isFlyingWheel ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
+                            Flying Wheel
                         </a>
                         <span class="text-slate-300">|</span>
                         <a href="ops-rationale.html" 
@@ -34,11 +34,11 @@ function createNavigation(currentPage = '') {
                         </a>
                         <span class="text-slate-300">|</span>
                         <button 
-                            onclick="handleExport()"
+                            onclick="handleLogout()"
                             class="px-3 py-1 rounded transition-colors text-slate-600 hover:bg-slate-100 cursor-pointer border-0 bg-transparent"
-                            title="Export to Markdown"
+                            title="Logout"
                         >
-                            Export
+                            Logout
                         </button>
                     </nav>
                 </div>
@@ -79,19 +79,19 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
                     className: 'flex items-center gap-3 text-xs'
                 }, [
                     React.createElement('a', {
-                        key: 'flywheel',
-                        href: 'pigeon-way.html',
-                        className: `px-3 py-1 rounded transition-colors ${isFlyingWheel ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
-                    }, 'Flying Wheel'),
+                        key: 'operationssheet',
+                        href: 'operations-sheet.html',
+                        className: `px-3 py-1 rounded transition-colors ${isOperationsSheet ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
+                    }, 'Operations Sheet'),
                     React.createElement('span', {
                         key: 'separator1',
                         className: 'text-slate-300'
                     }, '|'),
                     React.createElement('a', {
-                        key: 'operationssheet',
-                        href: 'operations-sheet.html',
-                        className: `px-3 py-1 rounded transition-colors ${isOperationsSheet ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
-                    }, 'Operations Sheet'),
+                        key: 'flywheel',
+                        href: 'pigeon-way.html',
+                        className: `px-3 py-1 rounded transition-colors ${isFlyingWheel ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
+                    }, 'Flying Wheel'),
                     React.createElement('span', {
                         key: 'separator2',
                         className: 'text-slate-300'
@@ -106,11 +106,11 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
                         className: 'text-slate-300'
                     }, '|'),
                     React.createElement('button', {
-                        key: 'export',
-                        onClick: () => handleExport(),
+                        key: 'logout',
+                        onClick: () => handleLogout(),
                         className: 'px-3 py-1 rounded transition-colors text-slate-600 hover:bg-slate-100 cursor-pointer border-0 bg-transparent',
-                        title: 'Export to Markdown'
-                    }, 'Export')
+                        title: 'Logout'
+                    }, 'Logout')
                 ])
             ])
         ]),
@@ -131,28 +131,22 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
 };
 
 /**
- * Handle export button click
+ * Handle logout button click
  */
-function handleExport() {
-    const currentPage = window.location.pathname;
-    let pageType = 'all';
-    
-    if (currentPage.includes('pigeon-way') || currentPage.includes('index.html') || currentPage === '/') {
-        pageType = 'flying-wheel';
-    } else if (currentPage.includes('operations-sheet')) {
-        pageType = 'operations-sheet';
-    } else if (currentPage.includes('ops-rationale')) {
-        pageType = 'ops-rationale';
-    }
-    
-    if (typeof exportCurrentPage === 'function') {
-        exportCurrentPage(pageType);
+function handleLogout() {
+    if (typeof clearAuthentication === 'function') {
+        clearAuthentication();
+        window.location.href = 'welcome.html';
     } else {
-        // Fallback if export function not loaded
-        alert('Export function is loading. Please try again in a moment.');
+        // Fallback if auth function not loaded
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('pigeon_authenticated');
+            localStorage.removeItem('pigeon_auth_timestamp');
+            window.location.href = 'welcome.html';
+        }
     }
 }
 
 // Expose globally
-window.handleExport = handleExport;
+window.handleLogout = handleLogout;
 
