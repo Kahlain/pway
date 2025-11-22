@@ -1,8 +1,10 @@
 [phases.setup]
-nixPkgs = ["python3"]
+nixPkgs = ["python3", "nodejs"]
 
 [phases.install]
-cmds = ["echo 'No installation needed for static site'"]
+cmds = [
+    "node generate-config.js || echo 'Warning: Could not generate config.js. Make sure AUTH_PASSWORD is set in Railway environment variables.'"
+]
 
 [start]
 cmd = "sh start.sh"

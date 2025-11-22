@@ -20,12 +20,21 @@
 
 This application is configured for Railway deployment. Simply connect your GitHub repository to Railway and it will automatically deploy.
 
-### Railway Environment Variables (Optional)
+### Railway Environment Variables (Required)
 
-If you prefer to use Railway environment variables instead of config.js:
+**IMPORTANT:** You must set the `AUTH_PASSWORD` environment variable in Railway for authentication to work.
 
-1. Set `AUTH_PASSWORD` in Railway's environment variables
-2. Railway will inject it during deployment
+1. Go to your Railway project dashboard
+2. Select your service
+3. Go to the "Variables" tab
+4. Click "+ New Variable"
+5. Set:
+   - **Name:** `AUTH_PASSWORD`
+   - **Value:** Your desired password (e.g., `Pigeon@2026b`)
+6. Click "Add"
+7. Redeploy your service
+
+The `js/config.js` file will be automatically generated during deployment from this environment variable.
 
 ## Features
 
