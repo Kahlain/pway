@@ -1,0 +1,259 @@
+{
+  "version": "0.8",
+  "highlightTerms": [
+    "Marketing",
+    "Account Directors (AS)",
+    "Producers",
+    "Project Coordinators"
+  ],
+  "stages": [
+    {
+      "id": "discover",
+      "step": 1,
+      "title": "DISCOVER",
+      "promise": "We uncover potential.",
+      "description": "Whether a new partner or a long-standing ally, we identify the strategic opportunity and ensure alignment before we begin.",
+      "color": "#D6407D",
+      "textColor": "white",
+      "engine": "Growth Engine",
+      "engineColor": "#D6407D",
+      "people": {
+        "experts": "Sales Leads, Account Directors (AS)",
+        "coordinators": "Sales Leads, Account Directors (AS)"
+      },
+      "processes": [
+        {
+          "name": "Lead Management & Sales",
+          "status": "new"
+        },
+        {
+          "name": "Sales Process",
+          "status": "new"
+        }
+      ],
+      "backProcess": [
+        {
+          "title": "Marketing",
+          "desc": "Events Management, PR, SEO, GEO, Websites, Newsletters, Social Media"
+        },
+        {
+          "title": "Financial Health",
+          "desc": "Stability & Profitability Analysis"
+        }
+      ],
+      "tdr": {
+        "tier": 1,
+        "target": "30%",
+        "rule": "Protect Revenue Velocity. Don't document relationship building; only document the container.",
+        "documentation": [
+          "CRM Deal Stages",
+          "Pricing/Contracts",
+          "Client Brief Intake"
+        ],
+        "aiImplication": "Automation here focuses on administrative offloading (e.g., Lead Scrapping, CRM data entry and enhancement, Proposals and Presentations automation...) rather than replacing the core task."
+      }
+    },
+    {
+      "id": "define",
+      "step": 2,
+      "title": "DEFINE",
+      "promise": "We seek the truth.",
+      "description": "Our experts dig deep. We conduct the investigations needed to seek out the singular truth that powers your brand.",
+      "color": "#D8F098",
+      "textColor": "#1e293b",
+      "engine": "Growth Engine",
+      "engineColor": "#84cc16",
+      "people": {
+        "experts": "Strategists, Subject Matter Experts",
+        "coordinators": "Strategists, Account Directors (AS)"
+      },
+      "processes": [
+        {
+          "name": "Client Brief Intake",
+          "status": "active"
+        },
+        {
+          "name": "Strategy Delivery",
+          "status": "active"
+        },
+        {
+          "name": "New Client Onboarding",
+          "status": "active"
+        },
+        {
+          "name": "Account Management",
+          "status": "active"
+        }
+      ],
+      "backProcess": [
+        {
+          "title": "Talent & Culture",
+          "desc": "Agile Rostering & Skill Matching"
+        },
+        {
+          "title": "Tech & Security",
+          "desc": "Access & Environment Setup"
+        }
+      ],
+      "tdr": {
+        "tier": 2,
+        "target": "50%",
+        "rule": "The Deliverable IS the Document. We document methodology to ensure IP retention.",
+        "documentation": [
+          "Research Methodologies",
+          "Strategic Frameworks",
+          "Brand Positioning Decks"
+        ],
+        "aiImplication": "AI Agents. Since the \"Rules\" are written, AI Agents can draft strategy outlines, conduct competitive research, and summarize insights."
+      }
+    },
+    {
+      "id": "develop",
+      "step": 3,
+      "title": "DEVELOP",
+      "promise": "We build the solution.",
+      "description": "We iterate, create, and design the core assets of the brand.",
+      "color": "#E98C38",
+      "textColor": "white",
+      "engine": "Delivery Engine",
+      "engineColor": "#E98C38",
+      "people": {
+        "experts": "Creative Directors and Subject Matter Experts",
+        "coordinators": "Project Coordinators, Account Directors (AS) and Creative Directors"
+      },
+      "processes": [
+        {
+          "name": "Packaging Delivery",
+          "status": "active"
+        },
+        {
+          "name": "Branding Delivery",
+          "status": "active"
+        },
+        {
+          "name": "Digital & 360 Delivery",
+          "status": "active"
+        },
+        {
+          "name": "Creative Team Planning",
+          "status": "merge"
+        }
+      ],
+      "backProcess": [
+        {
+          "title": "Tech & Security",
+          "desc": "Secure Collab Environments"
+        },
+        {
+          "title": "Talent & Culture",
+          "desc": "Capacity Management"
+        }
+      ],
+      "tdr": {
+        "tier": 1,
+        "target": "20%",
+        "rule": "Protect the Magic. You cannot write an SOP for \"having a good idea.\" Exempt 80% of the work.",
+        "documentation": [
+          "The Creative Brief",
+          "Approval Gates",
+          "Final Concept Rationale"
+        ],
+        "aiImplication": "Friction Removal. AI is used for mood-boarding and rapid prototyping. With established rules in place, AI can challenge the creative team to validate concepts against the brief before meetings are triggered, ensuring alignment without replacing the core creative spark."
+      }
+    },
+    {
+      "id": "deliver",
+      "step": 4,
+      "title": "DELIVER",
+      "promise": "We make it real.",
+      "description": "We execute the final output with compliance, precision and deploy to the world.",
+      "color": "#231F20",
+      "textColor": "white",
+      "engine": "Delivery Engine",
+      "engineColor": "#231F20",
+      "people": {
+        "experts": "Producers and Subject Matter Experts",
+        "coordinators": "Production Manager, Print and Digital Producers, Project Coordinators, Account Directors (AS)"
+      },
+      "processes": [
+        {
+          "name": "Production Team Planning",
+          "status": "merge"
+        },
+        {
+          "name": "Production",
+          "status": "active"
+        }
+      ],
+      "backProcess": [
+        {
+          "title": "Financial Health",
+          "desc": "Budget Integrity & Billing"
+        },
+        {
+          "title": "Tech & Security",
+          "desc": "Asset Protection"
+        }
+      ],
+      "tdr": {
+        "tier": 2,
+        "target": "40%",
+        "rule": "The Factory Floor. Processes must be documented for reproducibility and consistency.",
+        "documentation": [
+          "Asset Management Protocols",
+          "Resizing Specs",
+          "QA Checklists",
+          "File Naming Conventions"
+        ],
+        "aiImplication": "Asset Scaling. Since specs are defined, AI handles bulk resizing, format adaptation, and file organization automatically."
+      }
+    },
+    {
+      "id": "dynamize",
+      "step": 5,
+      "title": "DYNAMIZE",
+      "promise": "We grow together.",
+      "description": "We analyze the win, gather feedback, and optimize for the next cycle.",
+      "color": "#A6A8AB",
+      "textColor": "white",
+      "engine": "Growth Engine",
+      "engineColor": "#A6A8AB",
+      "people": {
+        "experts": "Subject Matter Experts and Executive Leaders",
+        "coordinators": "Strategists, Sales Leads, Account Directors"
+      },
+      "processes": [
+        {
+          "name": "Feedback to Opportunities",
+          "status": "todo"
+        },
+        {
+          "name": "Big Clients Quarterly Review",
+          "status": "todo"
+        }
+      ],
+      "backProcess": [
+        {
+          "title": "Marketing",
+          "desc": "Use Cases, Private Events, PR and Blog Posts, Social Media Broadcasts"
+        },
+        {
+          "title": "Talent & Culture",
+          "desc": "Knowledge Retention"
+        }
+      ],
+      "tdr": {
+        "tier": 1,
+        "target": "35%",
+        "rule": "Agile ROI. Document how we measure success to prove value, but keep feedback loops fast.",
+        "documentation": [
+          "Analytics Reporting Standards",
+          "Client Feedback Loops",
+          "Optimization Logs"
+        ],
+        "aiImplication": "Predictive Analysis. AI processes feedback data to suggest optimization strategies for the next cycle."
+      }
+    }
+  ]
+}
+

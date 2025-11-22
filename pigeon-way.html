@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pigeon Way</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <!-- Load authentication -->
+    <script src="js/auth.js"></script>
+    <!-- Load shared utilities -->
+    <script src="js/highlight-text.js"></script>
+    <script src="js/markdown-export.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/legend.js"></script>
+    <script src="js/tdr-accordion.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            overflow-x: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(230, 230, 230, 0.8);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* TDR Accordion Styles */
+        .tdr-accordion {
+            transition: all 0.3s ease;
+        }
+
+        .tdr-toggle {
+            min-height: 44px; /* Touch-friendly tap target */
+            cursor: pointer;
+        }
+
+        .tdr-toggle:focus {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+
+        .tdr-content {
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .tdr-accordion {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script>
+        // Check authentication before loading page
+        if (typeof requireAuth === 'function') {
+            requireAuth('welcome.html');
+        } else {
+            // Wait for auth.js to load
+            window.addEventListener('load', function() {
+                if (typeof requireAuth === 'function') {
+                    requireAuth('welcome.html');
+                }
+            });
+        }
+    </script>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        // Use shared components from loaded scripts
+        const HighlightText = window.HighlightText;
+        const NavigationComponent = window.NavigationComponent;
+        const TDRCard = window.TDRCard;
+        const LegendComponent = window.LegendComponent;
+
+        const App = () => {
+            const [stages, setStages] = useState([]);
+            const [activeStage, setActiveStage] = useState(0);
+            const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+            const [isLoading, setIsLoading] = useState(true);
+
+            // Load stages data from JSON
+            useEffect(() => {
+                async function loadStages() {
+                    try {
+                        const response = await fetch('data/stages-data.json');
+                        const data = await response.json();
+                        setStages(data.stages);
+                        setIsLoading(false);
+                    } catch (error) {
+                        console.error('Error loading stages data:', error);
+                        setIsLoading(false);
+                    }
+                }
+                loadStages();
+            }, []);
+
+            useEffect(() => {
+                if (stages.length === 0) return;
+                
+                let interval;
+                if (isAutoPlaying) {
+                    interval = setInterval(() => {
+                        setActiveStage((prev) => (prev + 1) % stages.length);
+                    }, 4000);
+                }
+                return () => clearInterval(interval);
+            }, [isAutoPlaying, stages.length]);
+
+            if (isLoading || stages.length === 0) {
+                return (
+                    <div className="min-h-screen w-full flex items-center justify-center bg-white">
+                        <div className="text-slate-400">Loading flying wheel...</div>
+                    </div>
+                );
+            }
+
+            const currentData = stages[activeStage];
+
+            return (
+                <div className="min-h-screen w-full p-8 md:p-12 max-w-7xl mx-auto">
+
+                    {/* Main Header with Navigation */}
+                    <NavigationComponent currentPage="flying-wheel" />
+
+                    {/* Main Content Area */}
+                    <div className="flex-1 flex flex-col md:flex-row items-center justify-center mt-8 relative z-10">
+
+                        {/* Left Side: The Flywheel */}
+                        <div className="w-full md:w-1/2 h-[400px] md:h-[600px] flex items-center justify-center mb-8 md:mb-0">
+                            <Flywheel
+                                stages={stages}
+                                activeStage={activeStage}
+                                setActiveStage={setActiveStage}
+                            />
+                        </div>
+
+                        {/* Right Side: The Scope & MIO */}
+                        <div className="w-full md:w-1/2 max-w-2xl p-4 md:p-0">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentData.id}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.4, ease: "easeOut" }}
+                                    className="glass-panel rounded-2xl p-8 border-t-8 shadow-2xl"
+                                    style={{ borderColor: currentData.color }}
+                                >
+                                    {/* Stage Title */}
+                                    <div className="mb-6">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <span className="text-xs font-bold tracking-widest uppercase text-slate-400">Step {activeStage + 1} / 5</span>
+                                            <div className="h-px flex-1 bg-slate-200"></div>
+                                        </div>
+                                        <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-2 tracking-tight" style={{ color: currentData.color === '#D8F098' ? '#84cc16' : currentData.color }}>{currentData.title}</h2>
+                                        <p className="serif text-2xl text-slate-600 italic">"{currentData.promise}"</p>
+                                    </div>
+
+                                    {/* Operational Triad: Team | Machine | Vitality */}
+                                    <div className="flex flex-col gap-8">
+
+                                        {/* 1. OUR PEOPLE */}
+                                        <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                                            <h3 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                                                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentData.color }}></span>
+                                                Our People
+                                            </h3>
+                                            <div className="space-y-4">
+                                                <div className="bg-white p-3 rounded border border-slate-200 shadow-sm">
+                                                    <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">The Experts</div>
+                                                    <div className="text-xs font-medium text-slate-700">
+                                                        <HighlightText text={currentData.people.experts} />
+                                                    </div>
+                                                </div>
+                                                <div className="bg-white p-3 rounded border border-slate-200 shadow-sm">
+                                                    <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">The Coordinators</div>
+                                                    <div className="text-xs font-medium text-slate-700">
+                                                        <HighlightText text={currentData.people.coordinators} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            {/* 2. THE FRONT PROCESSES */}
+                                            <div>
+                                                <h3 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                                                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentData.color }}></span>
+                                                    The Front Processes
+                                                </h3>
+                                                <div className="bg-slate-50 rounded-lg p-4 border border-slate-100 h-full flex flex-col justify-between">
+                                                    <ul className="space-y-2">
+                                                        {currentData.processes.map((proc, idx) => {
+                                                            let liClass = "flex items-center justify-between text-sm font-medium text-slate-700 p-3 rounded border shadow-sm ";
+                                                            let badgeClass = "text-[10px] px-1.5 py-0.5 rounded text-white ";
+                                                            let badgeText = "";
+
+                                                            if (proc.status === 'new') {
+                                                                liClass += "bg-indigo-50 border-indigo-200";
+                                                                badgeClass += "bg-indigo-600";
+                                                                badgeText = "NEW";
+                                                            } else if (proc.status === 'active') {
+                                                                liClass += "bg-white border-slate-100";
+                                                                badgeClass += "bg-green-600";
+                                                                badgeText = "Active";
+                                                            } else if (proc.status === 'merge') {
+                                                                liClass += "bg-red-50 border-red-200";
+                                                                badgeClass += "bg-red-700";
+                                                                badgeText = "Merge";
+                                                            } else if (proc.status === 'todo') {
+                                                                liClass += "bg-orange-50 border-orange-200";
+                                                                badgeClass += "bg-orange-600";
+                                                                badgeText = "To implement";
+                                                            }
+
+                                                            return (
+                                                                <li key={idx} className={liClass}>
+                                                                    {proc.name}
+                                                                    <span className={badgeClass}>{badgeText}</span>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                    <div className="mt-3">
+                                                        <span className="inline-block px-2 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200">
+                                                            Engine: {currentData.engine}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    {/* TDR Accordion for Front Processes */}
+                                                    {currentData.tdr && (
+                                                        <div className="mt-4">
+                                                            <TDRCard tdr={currentData.tdr} stageColor={currentData.color} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* 3. THE BACK PROCESS */}
+                                            <div>
+                                                <h3 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                                                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentData.color }}></span>
+                                                    The Back Process
+                                                </h3>
+                                                <div className="bg-slate-50 rounded-lg p-4 border border-slate-100 h-full flex flex-col justify-between">
+                                                    <div className="space-y-4">
+                                                        {currentData.backProcess.map((item, idx) => (
+                                                            <div key={idx} className="bg-white p-3 rounded border border-slate-200 shadow-sm">
+                                                                <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">
+                                                                    <HighlightText text={item.title} />
+                                                                </div>
+                                                                <div className="text-xs font-medium text-slate-700">{item.desc}</div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div className="mt-3">
+                                                        <span className="inline-block px-2 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200">
+                                                            Engine: Support Engine
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Loop Connector */}
+                                    {activeStage === 4 && (
+                                        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3 text-pink-600 animate-pulse">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" /></svg>
+                                            <span className="text-xs font-bold uppercase tracking-wide">Growth Loop: Triggers 'Discover'</span>
+                                        </div>
+                                    )}
+
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    </div>
+
+                    {/* Legend Footer */}
+                    <div className="mt-12">
+                        <LegendComponent />
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-12 text-center text-slate-400 text-xs border-t border-slate-200 pt-4 no-print">
+                        Generated by Inocta.io MIO Engine for Pigeon • Confidential
+                    </div>
+                </div>
+            );
+        };
+
+        const Flywheel = ({ stages, activeStage, setActiveStage }) => {
+            const radius = 160;
+            const center = 250;
+
+            return (
+                <div className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] xl:w-[500px] xl:h-[500px]">
+                    <svg viewBox="0 0 500 500" className="w-full h-full drop-shadow-xl">
+
+                        <circle cx={center} cy={center} r="60" fill="white" />
+                        <g className="animate-pulse">
+                            <circle cx={center} cy={center} r="50" fill="#D6407D" opacity="0.05" />
+                            <circle cx={center} cy={center} r="40" fill="#D6407D" opacity="0.1" />
+                        </g>
+
+                        <foreignObject x={center - 50} y={center - 50} width="100" height="100">
+                            <div className="w-full h-full flex flex-col items-center justify-center text-center pointer-events-none">
+                                <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Truth.</span>
+                                <span className="text-lg font-bold text-slate-800 serif">Client</span>
+                                <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Delivered.</span>
+                            </div>
+                        </foreignObject>
+
+                        {stages.map((stage, index) => {
+                            const totalStages = stages.length;
+                            const anglePerStage = 360 / totalStages;
+                            const startAngle = (index * anglePerStage) - 90;
+                            const endAngle = ((index + 1) * anglePerStage) - 90;
+                            const isActive = activeStage === index;
+
+                            const x1 = center + radius * Math.cos(Math.PI * startAngle / 180);
+                            const y1 = center + radius * Math.sin(Math.PI * startAngle / 180);
+                            const x2 = center + radius * Math.cos(Math.PI * endAngle / 180);
+                            const y2 = center + radius * Math.sin(Math.PI * endAngle / 180);
+
+                            const innerRadius = 80;
+                            const ix1 = center + innerRadius * Math.cos(Math.PI * endAngle / 180);
+                            const iy1 = center + innerRadius * Math.sin(Math.PI * endAngle / 180);
+                            const ix2 = center + innerRadius * Math.cos(Math.PI * startAngle / 180);
+                            const iy2 = center + innerRadius * Math.sin(Math.PI * startAngle / 180);
+
+                            const pathData = `
+                                M ${x1} ${y1}
+                                A ${radius} ${radius} 0 0 1 ${x2} ${y2}
+                                L ${ix1} ${iy1}
+                                A ${innerRadius} ${innerRadius} 0 0 0 ${ix2} ${iy2}
+                                Z
+                            `;
+
+                            const midAngle = startAngle + (anglePerStage / 2);
+                            const iconRadius = radius - 40;
+                            const tx = center + iconRadius * Math.cos(Math.PI * midAngle / 180);
+                            const ty = center + iconRadius * Math.sin(Math.PI * midAngle / 180);
+
+                            return (
+                                <g key={stage.id}
+                                    onClick={() => setActiveStage(index)}
+                                    className="cursor-pointer transition-all duration-500 ease-in-out"
+                                    style={{ opacity: isActive ? 1 : 0.7, transform: isActive ? 'scale(1.02)' : 'scale(1)', transformOrigin: 'center' }}
+                                >
+                                    <path
+                                        d={pathData}
+                                        fill={isActive ? stage.color : '#f1f5f9'}
+                                        stroke="white"
+                                        strokeWidth="4"
+                                        className="transition-colors duration-300 hover:fill-slate-200"
+                                    />
+                                    <text
+                                        x={tx}
+                                        y={ty}
+                                        textAnchor="middle"
+                                        dominantBaseline="middle"
+                                        fill={isActive ? stage.textColor : '#94a3b8'}
+                                        className="text-2xl font-bold pointer-events-none"
+                                        style={{ fontSize: '16px', fontWeight: 'bold' }}
+                                    >
+                                        {index + 1}
+                                    </text>
+                                    <text
+                                        x={center + (radius + 25) * Math.cos(Math.PI * midAngle / 180)}
+                                        y={center + (radius + 25) * Math.sin(Math.PI * midAngle / 180)}
+                                        textAnchor="middle"
+                                        dominantBaseline="middle"
+                                        className={`text-xs font-bold uppercase tracking-wider ${isActive ? 'fill-slate-800' : 'fill-slate-400'}`}
+                                    >
+                                        {stage.title}
+                                    </text>
+                                </g>
+                            );
+                        })}
+                    </svg>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
