@@ -3,7 +3,9 @@ nixPkgs = ["python3", "nodejs"]
 
 [phases.install]
 cmds = [
-    "node generate-config.js || echo 'Warning: Could not generate config.js. Make sure AUTH_PASSWORD is set in Railway environment variables.'"
+    "echo 'Checking AUTH_PASSWORD environment variable...'",
+    "if [ -z \"$AUTH_PASSWORD\" ]; then echo 'ERROR: AUTH_PASSWORD is not set!'; exit 1; fi",
+    "node generate-config.js"
 ]
 
 [start]
