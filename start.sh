@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 PORT=${PORT:-8000}
-python3 -m http.server $PORT --bind 0.0.0.0
+exec python3 -m http.server $PORT --bind 0.0.0.0
 
