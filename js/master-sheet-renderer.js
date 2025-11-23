@@ -147,7 +147,8 @@ function renderMasterSheet(data) {
  */
 async function initMasterSheet() {
     try {
-        const response = await fetch('data/stages-data.json');
+        // Add cache-busting parameter to ensure fresh data
+        const response = await fetch('data/stages-data.json?v=' + Date.now());
         const data = await response.json();
         
         const container = document.getElementById('master-sheet-content');

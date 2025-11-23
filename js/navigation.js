@@ -8,6 +8,7 @@ function createNavigation(currentPage = '') {
     const isOperationsSheet = currentPage === 'operations-sheet';
     const isFlyingWheel = currentPage === 'flying-wheel';
     const isOpsRationale = currentPage === 'ops-rationale';
+    const isOurServices = currentPage === 'our-services';
 
     return `
         <header class="mb-12 border-b-2 border-slate-900 pb-6 flex flex-col md:flex-row justify-between items-end">
@@ -15,7 +16,7 @@ function createNavigation(currentPage = '') {
                 <h1 class="serif text-5xl font-bold text-slate-900 tracking-tight mb-2">The Pigeon Way</h1>
                 <div class="flex items-center gap-4">
                     <div class="text-slate-500 font-medium uppercase tracking-widest text-sm">
-                        ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : 'The Flying Wheel v 0.8'}
+                        ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flying Wheel v 0.8'}
                     </div>
                     <nav class="flex items-center gap-3 text-xs">
                         <a href="operations-sheet.html" 
@@ -31,6 +32,11 @@ function createNavigation(currentPage = '') {
                         <a href="ops-rationale.html" 
                            class="px-3 py-1 rounded transition-colors ${isOpsRationale ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
                             Ops Rationale
+                        </a>
+                        <span class="text-slate-300">|</span>
+                        <a href="our-services.html" 
+                           class="px-3 py-1 rounded transition-colors ${isOurServices ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
+                            Our Services
                         </a>
                         <span class="text-slate-300">|</span>
                         <button 
@@ -57,6 +63,7 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
     const isOperationsSheet = currentPage === 'operations-sheet';
     const isFlyingWheel = currentPage === 'flying-wheel';
     const isOpsRationale = currentPage === 'ops-rationale';
+    const isOurServices = currentPage === 'our-services';
 
     return React.createElement('header', {
         className: 'relative z-20 w-full p-8 mb-4 border-b-2 border-slate-900 pb-6 flex flex-col md:flex-row justify-between items-end'
@@ -73,7 +80,7 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
                 React.createElement('div', {
                     key: 'label',
                     className: 'text-slate-500 font-medium uppercase tracking-widest text-sm pl-1'
-                }, isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : 'The Flying Wheel v 0.8'),
+                }, isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flying Wheel v 0.8'),
                 React.createElement('nav', {
                     key: 'nav',
                     className: 'flex items-center gap-3 text-xs'
@@ -103,6 +110,15 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
                     }, 'Ops Rationale'),
                     React.createElement('span', {
                         key: 'separator3',
+                        className: 'text-slate-300'
+                    }, '|'),
+                    React.createElement('a', {
+                        key: 'services',
+                        href: 'our-services.html',
+                        className: `px-3 py-1 rounded transition-colors ${isOurServices ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
+                    }, 'Our Services'),
+                    React.createElement('span', {
+                        key: 'separator4',
                         className: 'text-slate-300'
                     }, '|'),
                     React.createElement('button', {

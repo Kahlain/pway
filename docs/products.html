@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigeon Portfolio Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Custom scrollbar for tables if needed */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-slate-50">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-600 p-1.5 rounded-lg">
+                        <i data-lucide="bird" class="text-white h-6 w-6"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">Pigeon <span class="text-indigo-600">Portfolio</span></span>
+                </div>
+                
+                <!-- Search -->
+                <div class="hidden md:flex flex-1 max-w-lg mx-8 relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="h-4 w-4 text-slate-400"></i>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search products, deliverables, owners (EN/FR)..." 
+                        class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150">
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex bg-slate-100 p-1 rounded-lg">
+                        <button onclick="setView('grid')" id="btnGrid" class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 focus:outline-none transition-all">
+                            <i data-lucide="layout-grid" class="h-5 w-5"></i>
+                        </button>
+                        <button onclick="setView('table')" id="btnTable" class="p-1.5 rounded-md bg-white shadow-sm text-indigo-600 focus:outline-none transition-all">
+                            <i data-lucide="list" class="h-5 w-5"></i>
+                        </button>
+                    </div>
+                    <div class="text-sm font-medium text-slate-500 min-w-[80px] text-right">
+                        <span id="totalCount">0</span> Items
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-3">
+             <input type="text" id="mobileSearchInput" placeholder="Search..." class="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2 mb-8" id="filterContainer">
+            <button onclick="filterCategory('All')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-colors bg-slate-900 text-white shadow-md" data-category="All">
+                All
+            </button>
+            <button onclick="filterCategory('Strategy')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-category="Strategy">
+                Strategy
+            </button>
+            <button onclick="filterCategory('Packaging')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-category="Packaging">
+                Packaging
+            </button>
+            <button onclick="filterCategory('Branding and 360')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-category="Branding and 360">
+                Branding & 360
+            </button>
+            <button onclick="filterCategory('Production')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-category="Production">
+                Production
+            </button>
+        </div>
+
+        <!-- Content Container -->
+        <div id="contentArea" class="space-y-6">
+            <!-- Injected via JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4">
+                <i data-lucide="search-x" class="h-8 w-8 text-slate-400"></i>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900">No products found</h3>
+            <p class="text-slate-500">Try adjusting your search or filter.</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-400 text-sm">&copy; 2024 Pigeon Brands. Internal Portfolio Tool.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Data Source
+        const products = [
+            // --- STRATEGY ---
+            {
+                id: "STR-101",
+                category: "Strategy",
+                nameEN: "Brand Positioning",
+                nameFR: "Positionnement de Marque (Définition)",
+                shortDescEN: "Strategic brief defining brand promise, pillars, and tone.",
+                longDescEN: "A comprehensive strategic brief presented to the client that defines brand promise, pillars, and tone. Includes Truths investigation (culture, consumer, category, brand), FTT session, Insight, Opportunity, and Strategic Territories.",
+                shortDescFR: "Brief stratégique définissant la promesse de marque, les piliers et la tonalité.",
+                longDescFR: "Un brief stratégique complet présenté au client définissant la promesse de marque, les piliers et la tonalité. Inclut l'enquête sur les vérités (culture, conso, catégorie), session Face the Truth, Insights, Opportunités et Territoires stratégiques.",
+                price: "$250.00 / hr",
+                timeline: "7–10 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Approved kickoff + Access to research",
+                notes: "Approx $8K-$15K total. Only offered in Quebec for now.",
+                docs: "Template powerpoint Pigeon"
+            },
+            {
+                id: "STR-FTT",
+                category: "Strategy",
+                nameEN: "Face The Truth (FTT)",
+                nameFR: "Session Face The Truth (FTT)",
+                shortDescEN: "Collaborative workshop for strategic alignment.",
+                longDescEN: "4-5 hours or full day workshop including preparation, workshop material, moderation, and recap.",
+                shortDescFR: "Atelier collaboratif pour l'alignement stratégique.",
+                longDescFR: "Atelier de 4-5 heures ou journée complète incluant préparation, matériel d'atelier, modération et récapitulatif.",
+                price: "$250.00 / hr",
+                timeline: "10-15 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Alignment on brief + Kick off + Audit",
+                notes: "Half day: $8K-$15K. Full day: $10K-$15K.",
+                docs: "Face the Truth materials"
+            },
+            {
+                id: "STR-PYR",
+                category: "Strategy",
+                nameEN: "Brand Pyramid",
+                nameFR: "Pyramide de Marque",
+                shortDescEN: "Visual representation of brand strategy.",
+                longDescEN: "Develop brand pyramid. Includes 2 presentations and up to 2 rounds of revisions.",
+                shortDescFR: "Représentation visuelle de la stratégie de marque.",
+                longDescFR: "Développement de la pyramide de marque. Inclut 2 présentations et jusqu'à 2 rondes de révisions.",
+                price: "$250.00 / hr",
+                timeline: "7–10 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Alignment on brief + Research data + Interviews",
+                notes: "$5K-$10K for a brand. $10K-$20K for a company/new brand.",
+                docs: "Document et template Pyramide"
+            },
+            {
+                id: "STR-ARC",
+                category: "Strategy",
+                nameEN: "Brand / Portfolio Architecture",
+                nameFR: "Architecture de Marque / Portefeuille",
+                shortDescEN: "Portfolio organization and segmentation.",
+                longDescEN: "Segmentation and architecture. Define how products/services contribute to positioning. Includes definition of pillars.",
+                shortDescFR: "Organisation et segmentation du portefeuille.",
+                longDescFR: "Segmentation et architecture. Définir comment les produits/services contribuent au positionnement. Inclut la définition des piliers.",
+                price: "$250.00 / hr",
+                timeline: "7–10 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Alignment on brief + Client data",
+                notes: "$2.5k-$5k for simple projects, up to $15k for major ones.",
+                docs: "Template powerpoint Pigeon et/ou Miro"
+            },
+            {
+                id: "STR-NAM",
+                category: "Strategy",
+                nameEN: "Naming Strategy",
+                nameFR: "Stratégie de Nomenclature",
+                shortDescEN: "Strategic naming architecture exploration.",
+                longDescEN: "Strategic exploration for naming architecture and territories.",
+                shortDescFR: "Exploration stratégique de l'architecture de nomenclature.",
+                longDescFR: "Exploration stratégique pour l'architecture de nomenclature et les territoires de noms.",
+                price: "$250.00 / hr",
+                timeline: "Variable",
+                owner: "Maryse",
+                trigger: "Contract signed + Brief",
+                notes: "Focuses on strategic direction before creative generation.",
+                docs: "Template powerpoint Pigeon et/ou Miro"
+            },
+            {
+                id: "STR-BRIEF",
+                category: "Strategy",
+                nameEN: "Strategic / Comms Brief",
+                nameFR: "Brief Stratégique / Communication",
+                shortDescEN: "Internal creative briefing document.",
+                longDescEN: "Leverage client brief and prepare strat brief for internal creative team.",
+                shortDescFR: "Document de brief créatif interne.",
+                longDescFR: "Exploiter le brief client et préparer le brief stratégique pour l'équipe de création interne.",
+                price: "$250.00 / hr",
+                timeline: "2-5 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Client data + Interviews + FTT",
+                notes: "Usually included in larger scope.",
+                docs: "Template établi"
+            },
+            {
+                id: "STR-GTM",
+                category: "Strategy",
+                nameEN: "Go To Market / Comms Plan",
+                nameFR: "Plan de Communication / Mise en Marché",
+                shortDescEN: "Marketing launch strategy.",
+                longDescEN: "Marketing strategy launch plan. Build plan, present to client, 3 rounds revisions. Includes Insights, Strategic Territories.",
+                shortDescFR: "Stratégie de lancement marketing.",
+                longDescFR: "Plan de lancement marketing. Construction du plan, présentation au client, 3 rondes de révisions. Inclut Insights, Territoires Stratégiques.",
+                price: "$25,000.00 pkg",
+                timeline: "20-25 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Alignment on brief + Client data",
+                notes: "Can rank $5k-10k for smaller clients, up to $25k for bigger brands.",
+                docs: "Template powerpoint Pigeon"
+            },
+            {
+                id: "STR-INT",
+                category: "Strategy",
+                nameEN: "Interviews",
+                nameFR: "Entrevues",
+                shortDescEN: "One-on-one stakeholder interviews.",
+                longDescEN: "1:1 client interviews, questionnaire prep, booking, attending 1h call, summarizing data.",
+                shortDescFR: "Entrevues individuelles avec les parties prenantes.",
+                longDescFR: "Entrevues client 1:1, préparation du questionnaire, réservation, présence à l'appel d'1h, synthèse des données.",
+                price: "$500.00 / ea",
+                timeline: "10-20 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Alignment on brief + Client data",
+                notes: "Per deliverable/interview.",
+                docs: "-"
+            },
+            {
+                id: "STR-AUDIT",
+                category: "Strategy",
+                nameEN: "Audit",
+                nameFR: "Audit / Enquête",
+                shortDescEN: "Market and brand landscape analysis.",
+                longDescEN: "Truths investigation (Culture, consumer, competition, brand). Online/In-store audit.",
+                shortDescFR: "Analyse du paysage du marché et de la marque.",
+                longDescFR: "Enquête sur les vérités (Culture, conso, concurrence, marque). Audit en ligne et en magasin.",
+                price: "$150.00 / hr",
+                timeline: "10-20 days",
+                owner: "Maryse",
+                trigger: "Contract signed + Alignment on brief",
+                notes: "$2.5k for line extension, $5k-$10k for full audit.",
+                docs: "Template powerpoint Pigeon"
+            },
+
+            // --- PACKAGING (Owner: Olivier) ---
+            {
+                id: "PKG-PLAT",
+                category: "Packaging",
+                nameEN: "Packaging Platform",
+                nameFR: "Plateforme d'Emballage",
+                shortDescEN: "Creative packaging system exploration.",
+                longDescEN: "Creative exploration of packaging system. 2-3 concepts on 3-5 formats. Planogram demos.",
+                shortDescFR: "Exploration créative du système d'emballage.",
+                longDescFR: "Exploration créative du système d'emballage. 2-3 concepts sur 3-5 formats principaux. Démos planogrammes.",
+                price: "$20,000.00 pkg",
+                timeline: "30-50 days",
+                owner: "Olivier",
+                trigger: "Contract signed + Alignment on brief",
+                notes: "$5k-$10k for extensions. $25k-$50k for big brands.",
+                docs: "-"
+            },
+            {
+                id: "PKG-ART",
+                category: "Packaging",
+                nameEN: "Packaging Artwork",
+                nameFR: "Exécution / Déclinaison (Artwork)",
+                shortDescEN: "Print-ready production files.",
+                longDescEN: "Flat artwork respecting print specs. 2 rounds revision, source file transfer, QA.",
+                shortDescFR: "Fichiers de production prêts pour l'impression.",
+                longDescFR: "Mise en page à plat respectant les spécifications d'impression. 2 rondes de révision, transfert des sources, QA.",
+                price: "Varies / SKU",
+                timeline: "10-20 days",
+                owner: "Olivier",
+                trigger: "Approved design, SKU list, Dielines, Copydecks",
+                notes: "1 SKU ~$1980. 6+ SKUs ~$970 ea. Varies by complexity.",
+                docs: "Packaging Master / Extension List"
+            },
+            {
+                id: "PKG-3DMOD",
+                category: "Packaging",
+                nameEN: "3D Model Creation",
+                nameFR: "Création de Modèle 3D",
+                shortDescEN: "3D modeling of physical products.",
+                longDescEN: "Creation of new product format 3D models from physical sample.",
+                shortDescFR: "Modélisation 3D de produits physiques.",
+                longDescFR: "Création de modèles 3D pour nouveaux formats produits à partir d'échantillons physiques.",
+                price: "$600-$1,500",
+                timeline: "5-10 days",
+                owner: "Olivier",
+                trigger: "Physical sample or existing 3D model",
+                notes: "Price depends on complexity.",
+                docs: "-"
+            },
+            {
+                id: "PKG-3DECOM",
+                category: "Packaging",
+                nameEN: "3D - Ecomm",
+                nameFR: "3D - Commerce Électronique",
+                shortDescEN: "Digital assets for e-commerce.",
+                longDescEN: "3D rendering, GS1 compliant images, 3D marketing assets.",
+                shortDescFR: "Actifs numériques pour le commerce électronique.",
+                longDescFR: "Rendu 3D, images conformes GS1, actifs marketing 3D.",
+                price: "$275.00 / ea",
+                timeline: "3-7 days",
+                owner: "Olivier",
+                trigger: "SKU list, specs",
+                notes: "Different price grids per client.",
+                docs: "-"
+            },
+
+            // --- BRANDING & 360 (Owner: JF Béliveau) ---
+            {
+                id: "CRE-NAM",
+                category: "Branding and 360",
+                nameEN: "Naming (Creative)",
+                nameFR: "Création de Nom (Nomenclature)",
+                shortDescEN: "Brand name generation.",
+                longDescEN: "Name creation for brand/company. Briefing, brainstorm, Saegis check, domain options.",
+                shortDescFR: "Génération de noms de marque.",
+                longDescFR: "Création de nom pour marque/entreprise. Briefing, brainstorming, vérification Saegis, options de domaine.",
+                price: "$200.00 / hr",
+                timeline: "20-30 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Alignment on creative brief",
+                notes: "Company: $15k-$20k. Sub-range: $5k-$15k.",
+                docs: "-"
+            },
+            {
+                id: "CRE-ID",
+                category: "Branding and 360",
+                nameEN: "Brand Identity",
+                nameFR: "Identité de Marque",
+                shortDescEN: "Logo and visual identity design.",
+                longDescEN: "3 concepts for logo including visual language (color, font, icons). Initial presentation.",
+                shortDescFR: "Conception de logo et d'identité visuelle.",
+                longDescFR: "3 concepts de logo incluant le langage visuel (couleurs, typo, icônes). Présentation initiale.",
+                price: "$15,000.00 pkg",
+                timeline: "20-30 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Alignment on brief",
+                notes: "$1500-$4000 per extra revision round.",
+                docs: "-"
+            },
+            {
+                id: "CRE-GUIDE",
+                category: "Branding and 360",
+                nameEN: "Brand Guidelines",
+                nameFR: "Normes Graphiques (Brand Guide)",
+                shortDescEN: "Brand usage rulebook.",
+                longDescEN: "Creative exploration for brand, sub brand or product naming guidelines.",
+                shortDescFR: "Règles d'utilisation de la marque.",
+                longDescFR: "Exploration créative pour les normes de marque, sous-marque ou produit.",
+                price: "$15,000.00 pkg",
+                timeline: "10-20 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Approved design direction",
+                notes: "Range $5k - $30k.",
+                docs: "-"
+            },
+            {
+                id: "CRE-CORP",
+                category: "Branding and 360",
+                nameEN: "Corporate Applications",
+                nameFR: "Applications Corporatives",
+                shortDescEN: "Business collateral design.",
+                longDescEN: "Branding system across touchpoints: Corporate, signage, web, offices.",
+                shortDescFR: "Conception de matériel d'entreprise.",
+                longDescFR: "Système de marque sur divers points de contact : Corporatif, signalétique, web, bureaux.",
+                price: "$15,000.00 pkg",
+                timeline: "20-30 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Approved guidelines",
+                notes: "Depends on scope.",
+                docs: "-"
+            },
+            {
+                id: "CRE-SALES",
+                category: "Branding and 360",
+                nameEN: "Sales Tools Applications",
+                nameFR: "Outils de Vente",
+                shortDescEN: "Sales support materials.",
+                longDescEN: "Sales deck, truck wrapping, sell sheet, merchandise, etc.",
+                shortDescFR: "Matériel de support à la vente.",
+                longDescFR: "Présentation de vente, habillage camion, fiches de vente, marchandise, etc.",
+                price: "$20,000.00 pkg",
+                timeline: "20-30 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Brief + Design Direction",
+                notes: "Depends on brand scope and required applications.",
+                docs: "-"
+            },
+            {
+                id: "CRE-OFFICE",
+                category: "Branding and 360",
+                nameEN: "Office Brand Applications",
+                nameFR: "Applications Bureautiques",
+                shortDescEN: "Internal digital branding.",
+                longDescEN: "Email signature, Teams background, screensaver, PPT template, social media look.",
+                shortDescFR: "Image de marque numérique interne.",
+                longDescFR: "Signature courriel, arrière-plan Teams, écran de veille, gabarit PPT, look médias sociaux.",
+                price: "$12,000.00 pkg",
+                timeline: "20-30 days",
+                owner: "JF Béliveau",
+                trigger: "Approved brand platform",
+                notes: "Depends on brand scope and required applications.",
+                docs: "-"
+            },
+            {
+                id: "CRE-BIG",
+                category: "Branding and 360",
+                nameEN: "Comms Big Idea",
+                nameFR: "Grande Idée de Communication",
+                shortDescEN: "Key campaign concept.",
+                longDescEN: "Main brand communication idea, 2 concepts demonstrated on key touchpoints.",
+                shortDescFR: "Concept clé de campagne.",
+                longDescFR: "Idée principale de communication de marque, 2 concepts démontrés sur points de contact clés.",
+                price: "$20,000.00 pkg",
+                timeline: "15-20 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Brief + Media plan",
+                notes: "Usually 20% of media budget.",
+                docs: "-"
+            },
+            {
+                id: "CRE-BOOTH",
+                category: "Branding and 360",
+                nameEN: "Tradeshow Booth",
+                nameFR: "Kiosque d'Exposition",
+                shortDescEN: "Trade show presence design.",
+                longDescEN: "2-3 options for booth design, producing 1 footprint. 3 rounds of revision.",
+                shortDescFR: "Design de présence salon commercial.",
+                longDescFR: "2-3 options de design de kiosque, production d'une empreinte. 3 rondes de révisions.",
+                price: "$15,000.00 pkg",
+                timeline: "15-20 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Alignment on brief",
+                notes: "Depends on size, can be simple backdrop.",
+                docs: "-"
+            },
+            {
+                id: "CRE-SELL",
+                category: "Branding and 360",
+                nameEN: "Sell Sheet",
+                nameFR: "Fiche de Vente",
+                shortDescEN: "Product sales one-pager.",
+                longDescEN: "2 design options, producing 1 final sellsheet (2-4 pages). Excludes 3D/photo.",
+                shortDescFR: "Feuillet de vente produit.",
+                longDescFR: "2 options de design, production d'une fiche finale (2-4 pages). Exclut 3D/photo.",
+                price: "$2,500.00 pkg",
+                timeline: "10-15 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Alignment on brief",
+                notes: "Client provides SKU list and copy.",
+                docs: "-"
+            },
+            {
+                id: "CRE-PPT",
+                category: "Branding and 360",
+                nameEN: "PowerPoint Template",
+                nameFR: "Gabarit PowerPoint",
+                shortDescEN: "Custom presentation deck.",
+                longDescEN: "Creation of PPT template (10-15 pages) + programming. 2 design options.",
+                shortDescFR: "Présentation personnalisée.",
+                longDescFR: "Création de gabarit PPT (10-15 pages) + programmation. 2 options de design.",
+                price: "$5,000.00 pkg",
+                timeline: "15-20 days",
+                owner: "JF Béliveau",
+                trigger: "Contract signed + Approved guidelines",
+                notes: "Includes file collect for programming.",
+                docs: "-"
+            },
+
+            // --- PRODUCTION / STUDIO (Owner: Philippe) ---
+            {
+                id: "PROD-IMG",
+                category: "Production",
+                nameEN: "Imagery (Retouched)",
+                nameFR: "Imagerie (Retouche)",
+                shortDescEN: "Image retouching and composition.",
+                longDescEN: "Retouching, packaging to lifestyle, in house photoshoot options.",
+                shortDescFR: "Retouche d'image et composition.",
+                longDescFR: "Retouche, packaging vers lifestyle, options de séance photo interne.",
+                price: "$120.00 / hr",
+                timeline: "2-5 days",
+                owner: "Philippe",
+                trigger: "Contract signed + Approved guidelines",
+                notes: "Built from scratch each time.",
+                docs: "-"
+            },
+            {
+                id: "PROD-VID",
+                category: "Production",
+                nameEN: "Video Motion Design",
+                nameFR: "Motion Design Vidéo",
+                shortDescEN: "Animated brand assets.",
+                longDescEN: "Motion design for new identity, pack or short video animation.",
+                shortDescFR: "Actifs de marque animés.",
+                longDescFR: "Motion design pour nouvelle identité, emballage ou animation vidéo courte.",
+                price: "$120.00 / hr",
+                timeline: "5-15 days",
+                owner: "Philippe",
+                trigger: "Contract signed + Approved guidelines",
+                notes: "Logo animation, case studies.",
+                docs: "-"
+            },
+            {
+                id: "PROD-ASSETS",
+                category: "Production",
+                nameEN: "Brand Assets",
+                nameFR: "Actifs de Marque",
+                shortDescEN: "Core brand graphic files.",
+                longDescEN: "Logos, graphic elements, images, brand guide, etc.",
+                shortDescFR: "Fichiers graphiques de marque.",
+                longDescFR: "Logos, éléments graphiques, images, guide de marque, etc.",
+                price: "$2,500.00 pkg",
+                timeline: "5-10 days",
+                owner: "Philippe",
+                trigger: "Approved creation for logo and applications",
+                notes: "Price could vary depending of client's needs.",
+                docs: "-"
+            },
+            {
+                id: "PROD-DIG",
+                category: "Production",
+                nameEN: "Digital Campaign",
+                nameFR: "Campagne Numérique",
+                shortDescEN: "Online advertising assets.",
+                longDescEN: "Web banners, static/animated banners, social media assets.",
+                shortDescFR: "Actifs publicitaires en ligne.",
+                longDescFR: "Bannières web, bannières statiques/animées, actifs médias sociaux.",
+                price: "$800.00 / ea",
+                timeline: "5-15 days",
+                owner: "Philippe",
+                trigger: "Approved design, specs, copydecks",
+                notes: "Price to be validated.",
+                docs: "-"
+            },
+            {
+                id: "PROD-OOH",
+                category: "Production",
+                nameEN: "OOH + DOOH",
+                nameFR: "Affichage (OOH + DOOH)",
+                shortDescEN: "Out-of-home advertising assets.",
+                longDescEN: "Print/Digital billboards, transit advertising, booth assets.",
+                shortDescFR: "Actifs publicitaires hors domicile.",
+                longDescFR: "Panneaux imprimés/numériques, publicité transit, actifs de kiosque.",
+                price: "$800.00 / ea",
+                timeline: "5-15 days",
+                owner: "Philippe",
+                trigger: "Approved design, specs, copydecks",
+                notes: "Unit price is an average.",
+                docs: "-"
+            },
+            {
+                id: "PROD-PRT",
+                category: "Production",
+                nameEN: "Printed Assets",
+                nameFR: "Imprimés",
+                shortDescEN: "Physical marketing materials.",
+                longDescEN: "Flyers, mockups, sales sheets, etc. Print fees NOT included.",
+                shortDescFR: "Matériel marketing physique.",
+                longDescFR: "Dépliants, maquettes, fiches de vente, etc. Frais d'impression NON inclus.",
+                price: "$500 - $1200",
+                timeline: "5-10 days",
+                owner: "Philippe",
+                trigger: "Approved design, printing specs",
+                notes: "Varies greatly based on deliverable.",
+                docs: "-"
+            },
+             {
+                id: "PROD-PRESS",
+                category: "Production",
+                nameEN: "Press Approval",
+                nameFR: "Approbation Presse",
+                shortDescEN: "On-site print approval.",
+                longDescEN: "One day press approval + out of pocket costs.",
+                shortDescFR: "Approbation d'impression sur place.",
+                longDescFR: "Une journée d'approbation presse + frais déboursés.",
+                price: "$2,000.00 pkg",
+                timeline: "1-2 days",
+                owner: "Philippe",
+                trigger: "Estimate and colour proof approved",
+                notes: "+ out of pocket + extra travel time. Half-day fee = $1,500 rarely used.",
+                docs: "-"
+            },
+             {
+                id: "PROD-POS",
+                category: "Production",
+                nameEN: "POS Materials",
+                nameFR: "Matériel PLV (Point de Vente)",
+                shortDescEN: "Point-of-sale retail materials.",
+                longDescEN: "Danglers, coupons, blades, retail signage.",
+                shortDescFR: "Matériel de vente au détail.",
+                longDescFR: "Danglers, coupons, lames, signalétique détail.",
+                price: "$500 - $1200",
+                timeline: "5-10 days",
+                owner: "Philippe",
+                trigger: "Approved design, dielines, specs",
+                notes: "Varies greatly based on deliverable.",
+                docs: "-"
+            },
+             {
+                id: "PROD-OADA",
+                category: "Production",
+                nameEN: "OADA Accessibility",
+                nameFR: "Accessibilité OADA",
+                shortDescEN: "Accessibility compliance.",
+                longDescEN: "Accessibility for Ontarians with Disabilities Act - enabled documents.",
+                shortDescFR: "Conformité d'accessibilité.",
+                longDescFR: "Documents conformes à la Loi sur l'accessibilité pour les personnes handicapées de l'Ontario.",
+                price: "$100.00 / hr",
+                timeline: "5-12 days",
+                owner: "Philippe",
+                trigger: "Final document, production brief, references",
+                notes: "Need input to validate this row.",
+                docs: "-"
+            },
+            {
+                id: "PROD-QA",
+                category: "Production",
+                nameEN: "QA / Translation",
+                nameFR: "QA / Traduction",
+                shortDescEN: "Quality control and translation.",
+                longDescEN: "Proofreading, translation, quality assurance.",
+                shortDescFR: "Contrôle qualité et traduction.",
+                longDescFR: "Relecture, traduction, assurance qualité.",
+                price: "$80.00 / hr",
+                timeline: "2-5 days",
+                owner: "Philippe",
+                trigger: "Task + Brief",
+                notes: "Usually included in artwork cost.",
+                docs: "-"
+            }
+        ];
+
+        // DOM Elements
+        const contentArea = document.getElementById('contentArea');
+        const searchInput = document.getElementById('searchInput');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const emptyState = document.getElementById('emptyState');
+        const totalCount = document.getElementById('totalCount');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const btnGrid = document.getElementById('btnGrid');
+        const btnTable = document.getElementById('btnTable');
+
+        // State
+        let currentCategory = 'All';
+        let searchQuery = '';
+        let viewMode = 'table'; // Default view based on "build a new table" request
+
+        // Colors
+        const categoryConfig = {
+            "Strategy": { bg: "bg-purple-100", text: "text-purple-700", border: "border-purple-200" },
+            "Packaging": { bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200" },
+            "Branding and 360": { bg: "bg-pink-100", text: "text-pink-700", border: "border-pink-200" },
+            "Production": { bg: "bg-emerald-100", text: "text-emerald-700", border: "border-emerald-200" }
+        };
+
+        // Render Function
+        function render() {
+            contentArea.innerHTML = '';
+            
+            const filtered = products.filter(p => {
+                const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
+                const searchLower = searchQuery.toLowerCase();
+                const matchesSearch = 
+                    p.nameEN.toLowerCase().includes(searchLower) || 
+                    p.nameFR.toLowerCase().includes(searchLower) ||
+                    p.shortDescEN.toLowerCase().includes(searchLower) ||
+                    p.longDescEN.toLowerCase().includes(searchLower) ||
+                    p.owner.toLowerCase().includes(searchLower);
+                return matchesCategory && matchesSearch;
+            });
+
+            totalCount.innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            if (viewMode === 'table') {
+                contentArea.className = "flex flex-col gap-8"; // Stack for tables
+                renderTableLayout(filtered);
+            } else {
+                contentArea.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"; // Grid for cards
+                renderGridLayout(filtered);
+            }
+            
+            lucide.createIcons();
+        }
+
+        function renderTableLayout(items) {
+            items.forEach(product => {
+                const config = categoryConfig[product.category] || { bg: "bg-gray-100", text: "text-gray-700", border: "border-gray-200" };
+                
+                const tableHTML = `
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                         <div class="flex items-center gap-3">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${config.bg} ${config.text} border ${config.border}">
+                                ${product.category}
+                            </span>
+                            <h3 class="text-lg font-bold text-slate-900">${product.nameEN} <span class="font-normal text-slate-400 mx-1">/</span> <span class="text-slate-600">${product.nameFR}</span></h3>
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono">${product.id}</div>
+                    </div>
+                    
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-sm text-left">
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="bg-white">
+                                    <td class="px-6 py-4 w-1/4 font-semibold text-slate-500">Short Description (Summary)</td>
+                                    <td class="px-6 py-4">
+                                        <div class="mb-1 text-slate-800 font-medium">${product.shortDescEN}</div>
+                                        <div class="text-slate-500 italic text-xs">${product.shortDescFR}</div>
+                                    </td>
+                                </tr>
+                                <tr class="bg-slate-50/50">
+                                    <td class="px-6 py-4 w-1/4 font-semibold text-slate-500">Detailed Description</td>
+                                    <td class="px-6 py-4">
+                                        <div class="mb-2 text-slate-700 leading-relaxed">${product.longDescEN}</div>
+                                        <div class="text-slate-600 italic text-xs leading-relaxed border-t border-slate-200 pt-2 mt-2">${product.longDescFR}</div>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="px-6 py-3 w-1/4 font-semibold text-slate-500">Price & Timeline</td>
+                                    <td class="px-6 py-3">
+                                        <div class="flex items-center gap-6">
+                                            <span class="inline-flex items-center text-slate-900 font-bold bg-green-50 px-2 py-1 rounded border border-green-100 text-green-700">
+                                                ${product.price}
+                                            </span>
+                                            <span class="inline-flex items-center text-slate-600">
+                                                <i data-lucide="clock" class="w-4 h-4 mr-2 text-slate-400"></i> ${product.timeline}
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-3 w-1/4 font-semibold text-slate-500">Owner</td>
+                                    <td class="px-6 py-3 text-slate-800 flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">
+                                            ${product.owner.charAt(0)}
+                                        </div>
+                                        ${product.owner}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-3 w-1/4 font-semibold text-slate-500">Trigger & Req.</td>
+                                    <td class="px-6 py-3 text-indigo-600 font-medium bg-indigo-50/30">
+                                        <i data-lucide="zap" class="w-3.5 h-3.5 inline mr-1 text-indigo-500"></i> ${product.trigger}
+                                    </td>
+                                </tr>
+                                ${product.docs && product.docs !== '-' ? `
+                                <tr>
+                                    <td class="px-6 py-3 w-1/4 font-semibold text-slate-500">Documents</td>
+                                    <td class="px-6 py-3 text-slate-600">
+                                        <i data-lucide="file-text" class="w-3.5 h-3.5 inline mr-1 text-slate-400"></i> ${product.docs}
+                                    </td>
+                                </tr>` : ''}
+                                ${product.notes ? `
+                                <tr>
+                                    <td class="px-6 py-3 w-1/4 font-semibold text-slate-500">Notes</td>
+                                    <td class="px-6 py-3 text-slate-500 text-xs italic">${product.notes}</td>
+                                </tr>` : ''}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+                
+                contentArea.insertAdjacentHTML('beforeend', tableHTML);
+            });
+        }
+
+        function renderGridLayout(items) {
+             items.forEach(product => {
+                const config = categoryConfig[product.category] || { bg: "bg-gray-100", text: "text-gray-700", border: "border-gray-200" };
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200 p-6 flex flex-col h-full hover:shadow-lg transition-shadow";
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${config.bg} ${config.text} ${config.border}">
+                            ${product.category}
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-slate-900 leading-tight mb-1">${product.nameEN}</h3>
+                    <h4 class="text-sm text-slate-500 italic mb-4">${product.nameFR}</h4>
+                    
+                    <div class="flex items-baseline gap-1 mb-4">
+                        <span class="text-xl font-bold text-slate-900">${product.price}</span>
+                    </div>
+
+                    <p class="text-slate-600 text-sm mb-6 flex-grow leading-relaxed border-l-2 border-slate-100 pl-3">
+                        ${product.shortDescEN}
+                    </p>
+
+                    <div class="border-t border-slate-100 pt-4 mt-auto space-y-3">
+                        <div class="flex items-center text-sm text-slate-600">
+                            <i data-lucide="clock" class="w-4 h-4 mr-2 text-slate-400"></i>
+                            ${product.timeline}
+                        </div>
+                        <div class="flex items-center text-sm text-slate-600">
+                            <i data-lucide="user" class="w-4 h-4 mr-2 text-slate-400"></i>
+                            ${product.owner}
+                        </div>
+                    </div>
+                `;
+                contentArea.appendChild(card);
+            });
+        }
+
+        // Logic
+        function filterCategory(cat) {
+            currentCategory = cat;
+            
+            filterBtns.forEach(btn => {
+                if(btn.dataset.category === cat) {
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-100');
+                    btn.classList.add('bg-slate-900', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-100');
+                    btn.classList.remove('bg-slate-900', 'text-white', 'shadow-md');
+                }
+            });
+            render();
+        }
+
+        function setView(mode) {
+            viewMode = mode;
+            if (mode === 'grid') {
+                btnGrid.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnGrid.classList.remove('text-slate-500');
+                btnTable.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnTable.classList.add('text-slate-500');
+            } else {
+                btnTable.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnTable.classList.remove('text-slate-500');
+                btnGrid.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnGrid.classList.add('text-slate-500');
+            }
+            render();
+        }
+
+        // Search listeners
+        searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; render(); });
+        mobileSearchInput.addEventListener('input', (e) => { searchQuery = e.target.value; render(); });
+
+        // Init
+        render();
+
+    </script>
+</body>
+</html>

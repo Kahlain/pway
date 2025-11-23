@@ -18,7 +18,7 @@ function createLegendHTML() {
                         <span class="text-red-800 font-bold">Red Bold Functions</span>
                     </h4>
                     <p class="text-xs text-slate-600 leading-relaxed mb-2">
-                        <span class="text-red-800 font-bold">Marketing, Account Directors, Project Coordinators, and Producers</span> are functions that are important, but not clearly defined and managed. The organization will gain efficiency by better integrating and clarifying these functions.
+                        <span class="text-red-800 font-bold">Marketing, Account Directors, Project Coordinators, Producers, and Account Management</span> are functions that are important, but not clearly defined and managed. The organization will gain efficiency by better integrating and clarifying these functions.
                     </p>
                 </div>
                 
@@ -91,7 +91,7 @@ function LegendComponent() {
                     React.createElement('span', {
                         key: 'highlight',
                         className: 'text-red-800 font-bold'
-                    }, 'Marketing, Account Directors, Project Coordinators, and Producers'),
+                    }, 'Marketing, Account Directors, Project Coordinators, Producers, and Account Management'),
                     ' are functions that are important, but not clearly defined and managed. The organization will gain efficiency by better integrating and clarifying these functions.'
                 ])
             ]),

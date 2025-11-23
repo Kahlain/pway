@@ -4,7 +4,8 @@
     "Marketing",
     "Account Directors (AS)",
     "Producers",
-    "Project Coordinators"
+    "Project Coordinators",
+    "Account Management"
   ],
   "stages": [
     {
@@ -39,6 +40,10 @@
         {
           "title": "Financial Health",
           "desc": "Stability & Profitability Analysis"
+        },
+        {
+          "title": "Account Management",
+          "desc": "Client touch point and coordination"
         }
       ],
       "tdr": {
@@ -79,10 +84,6 @@
         {
           "name": "New Client Onboarding",
           "status": "active"
-        },
-        {
-          "name": "Account Management",
-          "status": "active"
         }
       ],
       "backProcess": [
@@ -93,6 +94,10 @@
         {
           "title": "Tech & Security",
           "desc": "Access & Environment Setup"
+        },
+        {
+          "title": "Account Management",
+          "desc": "Client touch point and coordination"
         }
       ],
       "tdr": {
@@ -147,6 +152,10 @@
         {
           "title": "Talent & Culture",
           "desc": "Capacity Management"
+        },
+        {
+          "title": "Account Management",
+          "desc": "Client touch point and coordination"
         }
       ],
       "tdr": {
@@ -193,6 +202,10 @@
         {
           "title": "Tech & Security",
           "desc": "Asset Protection"
+        },
+        {
+          "title": "Account Management",
+          "desc": "Client touch point and coordination"
         }
       ],
       "tdr": {
@@ -240,6 +253,10 @@
         {
           "title": "Talent & Culture",
           "desc": "Knowledge Retention"
+        },
+        {
+          "title": "Account Management",
+          "desc": "Client touch point and coordination"
         }
       ],
       "tdr": {

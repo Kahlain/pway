@@ -8,7 +8,8 @@ const HIGHLIGHT_TERMS = [
     "Marketing",
     "Account Directors (AS)",
     "Producers",
-    "Project Coordinators"
+    "Project Coordinators",
+    "Account Management"
 ];
 
 /**
