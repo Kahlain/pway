@@ -120,9 +120,9 @@
         <!-- Interactive Chart & Calculator Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
             <!-- Calculator Box -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <div>
                 <h3 class="text-lg font-bold text-slate-900 mb-4 serif">The Math of Inefficiency</h3>
-                <p class="text-slate-600 mb-6">Drag to see how complexity explodes as we hire.</p>
+                <p class="text-slate-600 mb-6 text-sm">Drag the slider to see how communication complexity explodes as team size grows.</p>
                 
                 <label class="block text-sm font-medium text-slate-700 mb-3">
                     Team Size: <span id="teamSizeVal" class="font-bold text-slate-900 text-lg">14</span> people
@@ -131,23 +131,23 @@
                     <input type="range" id="sizeSlider" min="3" max="60" value="14" class="w-full" style="background: transparent;">
                 </div>
                 
-                <span class="block text-sm font-medium text-slate-600 mb-2">Communication Lines (Points of Failure):</span>
+                <span class="block text-sm font-medium text-slate-600 mb-2">Communication Lines:</span>
                 <div id="linesVal" class="text-5xl md:text-6xl font-bold text-green-600 mb-4">91</div>
                 
                 <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mb-4">
                     <p class="text-xs text-slate-700 leading-relaxed">
-                        <strong class="text-slate-900">Human Cognitive Limit:</strong> Research shows that humans can effectively maintain a maximum of <strong class="text-amber-700">150 lines of communication</strong>. Beyond this threshold, teams require structured processes and documentation to function effectively.
+                        <strong class="text-slate-900">Human Cognitive Limit:</strong> Research shows humans can effectively maintain a maximum of <strong class="text-amber-700">150 lines of communication</strong>. Beyond this threshold, teams require structured processes and documentation to function effectively.
                     </p>
                 </div>
                 
                 <p class="text-sm text-slate-600 leading-relaxed">
                     <strong class="text-slate-900">The Formula:</strong> <span class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800">N(N-1)/2</span><br>
-                    Every new hire increases the "noise" exponentially.
+                    Each new hire increases communication complexity exponentially, not linearly.
                 </p>
             </div>
 
             <!-- Chart Container -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <div>
                 <div class="chart-container">
                     <canvas id="complexityChart"></canvas>
                 </div>
@@ -158,7 +158,7 @@
     <!-- From Chaos to Clarity Section -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 mb-8">
         <h3 class="text-lg font-bold text-slate-900 mb-2 serif">From Chaos to Clarity</h3>
-        <p class="text-sm font-medium text-slate-600 mb-6">Implementing "Operating Procedures" as we grow</p>
+        <p class="text-sm font-medium text-slate-600 mb-6">Why structured processes become essential as teams grow</p>
         
         <div class="space-y-6">
             <!-- The Biological Limit -->
@@ -168,13 +168,7 @@
                     <li class="flex items-start gap-3">
                         <span class="text-blue-600 font-bold mt-0.5">→</span>
                         <p class="text-xs text-slate-600 leading-relaxed flex-1">
-                            <strong class="text-slate-900">Brooks's Law:</strong> Adding people to a chaotic process just creates <em>more</em> chaos and slows down delivery.
-                        </p>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="text-blue-600 font-bold mt-0.5">→</span>
-                        <p class="text-xs text-slate-600 leading-relaxed flex-1">
-                            <strong class="text-slate-900">Dunbar's Number:</strong> Humans can only maintain ~150 relationships. Beyond that, trust requires <strong class="text-slate-900">structure</strong>, not just proximity.
+                            <strong class="text-slate-900">Dunbar's Number:</strong> Humans can effectively maintain approximately <strong class="text-slate-900">150 relationships</strong>. Beyond this threshold, trust requires <strong class="text-slate-900">structure</strong>, not just proximity.
                         </p>
                     </li>
                     <li class="flex items-start gap-3">
@@ -188,13 +182,69 @@
             
             <!-- The Ask -->
             <div class="bg-slate-50 rounded-lg p-6 border-l-4 border-blue-600">
-                <h4 class="text-sm font-bold text-slate-700 mb-3">The Ask</h4>
+                <h4 class="text-sm font-bold text-slate-700 mb-3">The Shift Required</h4>
                 <p class="text-xs text-slate-600 leading-relaxed mb-3">
-                    We need to shift from <strong class="text-slate-900">"Tribal Knowledge"</strong> (asking around) to <strong class="text-slate-900">"Explicit Knowledge"</strong> (documented processes).
+                    We must shift from <strong class="text-slate-900">"Tribal Knowledge"</strong> (asking around) to <strong class="text-slate-900">"Explicit Knowledge"</strong> (documented processes).
                 </p>
                 <p class="text-xs text-slate-600 leading-relaxed">
-                    This isn't bureaucracy; it is the infrastructure required to scale past <strong class="text-slate-900">50 employees</strong> without grinding to a halt.
+                    This isn't bureaucracy—it's the infrastructure required to scale past <strong class="text-slate-900">50 employees</strong> without grinding to a halt.
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brooks's Law Card -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 mb-8">
+        <h3 class="text-lg font-bold text-slate-900 mb-2 serif">Brooks's Law: Resource Allocation & Operational Risks</h3>
+        <p class="text-sm font-medium text-slate-600 mb-6 italic">"Adding manpower to a late project makes it later."</p>
+        
+        <div class="space-y-6">
+            <p class="text-xs text-slate-700 leading-relaxed">
+                Adding new team members to a delayed initiative often creates a net loss in productivity rather than a gain. This phenomenon highlights a critical dependency on process maturity: if your operational systems are not robust enough to absorb new headcount, efficiency will decline.
+            </p>
+            
+            <div class="space-y-4">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 mb-2">1. The Ramp-Up Cost (Process Dependency)</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        New hires require significant time from your highest-performing team members for oversight, training, and knowledge transfer. If your internal documentation and Standard Operating Procedures (SOPs) are not comprehensive, your core team must stop executing to mentor new arrivals, causing immediate output to drop.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 mb-2">2. The Communication Overhead</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Complexity increases exponentially, not linearly. As you add headcount, the volume of necessary coordination—meetings, status checks, and approvals—spikes. Without rigid communication protocols and established workflows, the team spends more time synchronizing than executing.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 mb-2">3. Task Indivisibility</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Complex knowledge work cannot simply be divided like an assembly line. Certain strategic tasks are sequential and rely on a single point of focus. Adding more staff to these tasks creates bottlenecks rather than speed. As Fred Brooks noted: <em>"Nine women can't make a baby in one month."</em>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-slate-50 rounded-lg p-6 border-l-4 border-blue-600">
+                <h4 class="text-sm font-bold text-slate-700 mb-3">Strategic Alternatives</h4>
+                <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                    Before increasing headcount to address a delay, management should consider:
+                </p>
+                <ul class="space-y-2 text-xs text-slate-600">
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-600 font-bold mt-0.5">•</span>
+                        <span><strong class="text-slate-900">Process Optimization:</strong> Address workflow bottlenecks before adding resources; adding people to a broken process magnifies the inefficiency.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-600 font-bold mt-0.5">•</span>
+                        <span><strong class="text-slate-900">Scope Reduction:</strong> Prioritize critical objectives and defer secondary requirements.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-600 font-bold mt-0.5">•</span>
+                        <span><strong class="text-slate-900">Resource Isolation:</strong> If personnel must be added, assign them to fully independent, non-critical tasks to preserve the momentum of the core team.</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
