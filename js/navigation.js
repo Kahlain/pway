@@ -8,6 +8,7 @@ function createNavigation(currentPage = '') {
     const isOperationsSheet = currentPage === 'operations-sheet';
     const isFlyingWheel = currentPage === 'flying-wheel';
     const isOpsRationale = currentPage === 'ops-rationale';
+    const isCommunicationParadox = currentPage === 'communication-paradox';
     const isOurServices = currentPage === 'our-services';
 
     return `
@@ -27,7 +28,7 @@ function createNavigation(currentPage = '') {
             <!-- Bottom Row: Page Label and Navigation -->
             <div class="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
                 <div class="text-slate-500 font-medium uppercase tracking-widest text-xs md:text-sm">
-                    ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flywheel v 0.8'}
+                    ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isCommunicationParadox ? 'Communication Paradox' : isOurServices ? 'Our Services' : 'The Flywheel v 0.8'}
                 </div>
                 <nav class="flex items-center gap-2 md:gap-3 text-xs flex-wrap">
                     <a href="operations-sheet.html" 
@@ -43,6 +44,11 @@ function createNavigation(currentPage = '') {
                     <a href="ops-rationale.html" 
                        class="px-3 py-1.5 rounded transition-colors ${isOpsRationale ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
                         Ops Rationale
+                    </a>
+                    <span class="text-slate-300">|</span>
+                    <a href="communication-paradox.html" 
+                       class="px-3 py-1.5 rounded transition-colors ${isCommunicationParadox ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
+                        Communication Paradox
                     </a>
                     <span class="text-slate-300">|</span>
                     <a href="our-services.html" 
@@ -69,6 +75,7 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
     const isOperationsSheet = currentPage === 'operations-sheet';
     const isFlyingWheel = currentPage === 'flying-wheel';
     const isOpsRationale = currentPage === 'ops-rationale';
+    const isCommunicationParadox = currentPage === 'communication-paradox';
     const isOurServices = currentPage === 'our-services';
 
     return React.createElement('header', {
@@ -117,7 +124,7 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
             React.createElement('div', {
                 key: 'label',
                 className: 'text-slate-500 font-medium uppercase tracking-widest text-xs md:text-sm'
-            }, isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flywheel v 0.8'),
+            }, isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isCommunicationParadox ? 'Communication Paradox' : isOurServices ? 'Our Services' : 'The Flywheel v 0.8'),
             React.createElement('nav', {
                 key: 'nav',
                 className: 'flex items-center gap-2 md:gap-3 text-xs flex-wrap'
@@ -150,12 +157,21 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
                     className: 'text-slate-300'
                 }, '|'),
                 React.createElement('a', {
+                    key: 'paradox',
+                    href: 'communication-paradox.html',
+                    className: `px-3 py-1.5 rounded transition-colors ${isCommunicationParadox ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
+                }, 'Communication Paradox'),
+                React.createElement('span', {
+                    key: 'separator4',
+                    className: 'text-slate-300'
+                }, '|'),
+                React.createElement('a', {
                     key: 'services',
                     href: 'our-services.html',
                     className: `px-3 py-1.5 rounded transition-colors ${isOurServices ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
                 }, 'Our Services'),
                 React.createElement('span', {
-                    key: 'separator4',
+                    key: 'separator5',
                     className: 'text-slate-300'
                 }, '|'),
                 React.createElement('button', {

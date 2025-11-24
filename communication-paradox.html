@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Paradox - The Pigeon Way</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            min-width: 0;
+        }
+        
+        /* Range slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-webkit-slider-track {
+            background: #f1f5f9;
+            height: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #3b82f6;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            margin-top: -9px;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #2563eb;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        input[type="range"]::-moz-range-track {
+            background: #f1f5f9;
+            height: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            background: #3b82f6;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb:hover {
+            background: #2563eb;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+    
+    <!-- Load authentication -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <!-- Load shared utilities -->
+    <script src="js/navigation.js"></script>
+</head>
+<body class="p-8 md:p-12 max-w-7xl mx-auto">
+    <!-- Navigation Header (will be inserted by navigation.js) -->
+    <div id="navigation-container"></div>
+
+    <!-- Main Content -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 md:p-12 mb-8">
+        <!-- Title Section -->
+        <h1 class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-2">The Scale Paradox</h1>
+        <h2 class="text-2xl md:text-3xl font-semibold text-slate-700 mb-8">Why "Open Communication" breaks at scale</h2>
+
+        <!-- Interactive Chart & Calculator Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+            <!-- Calculator Box -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 serif">The Math of Inefficiency</h3>
+                <p class="text-slate-600 mb-6">Drag to see how complexity explodes as we hire.</p>
+                
+                <label class="block text-sm font-medium text-slate-700 mb-3">
+                    Team Size: <span id="teamSizeVal" class="font-bold text-slate-900 text-lg">14</span> people
+                </label>
+                <input type="range" id="sizeSlider" min="3" max="50" value="14" class="w-full mb-6">
+                
+                <span class="block text-sm font-medium text-slate-600 mb-2">Communication Lines (Points of Failure):</span>
+                <div id="linesVal" class="text-5xl md:text-6xl font-bold text-green-600 mb-4">91</div>
+                
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mb-4">
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        <strong class="text-slate-900">Human Cognitive Limit:</strong> Research shows that humans can effectively maintain a maximum of <strong class="text-amber-700">150 lines of communication</strong>. Beyond this threshold, teams require structured processes and documentation to function effectively.
+                    </p>
+                </div>
+                
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    <strong class="text-slate-900">The Formula:</strong> <span class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800">N(N-1)/2</span><br>
+                    Every new hire increases the "noise" exponentially.
+                </p>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <div class="chart-container">
+                    <canvas id="complexityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lines Image -->
+        <div class="mt-8 flex justify-center">
+            <img src="lines.jpg" alt="Lines of Communication" class="max-w-4xl w-full rounded-lg shadow-sm">
+        </div>
+    </div>
+
+    <!-- Legend-Style Card Section -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+        <h3 class="text-lg font-bold text-slate-900 mb-2 serif">From Chaos to Clarity</h3>
+        <p class="text-sm font-medium text-slate-600 mb-6">Implementing "Operating Procedures" as we grow</p>
+        
+        <div class="space-y-6">
+            <!-- The Biological Limit -->
+            <div>
+                <h4 class="text-sm font-bold text-slate-700 mb-3">The Biological Limit</h4>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                        <span class="text-blue-600 font-bold mt-0.5">→</span>
+                        <p class="text-xs text-slate-600 leading-relaxed flex-1">
+                            <strong class="text-slate-900">Brooks's Law:</strong> Adding people to a chaotic process just creates <em>more</em> chaos and slows down delivery.
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-blue-600 font-bold mt-0.5">→</span>
+                        <p class="text-xs text-slate-600 leading-relaxed flex-1">
+                            <strong class="text-slate-900">Dunbar's Number:</strong> Humans can only maintain ~150 relationships. Beyond that, trust requires <strong class="text-slate-900">structure</strong>, not just proximity.
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-blue-600 font-bold mt-0.5">→</span>
+                        <p class="text-xs text-slate-600 leading-relaxed flex-1">
+                            <strong class="text-slate-900">The Solution:</strong> Procedures act as an <span class="text-yellow-600 font-bold">API for Humans</span>. They replace "finding out who to ask" with "knowing where to look."
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- The Ask -->
+            <div class="bg-slate-50 rounded-lg p-6 border-l-4 border-blue-600">
+                <h4 class="text-sm font-bold text-slate-700 mb-3">The Ask</h4>
+                <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                    We need to shift from <strong class="text-slate-900">"Tribal Knowledge"</strong> (asking around) to <strong class="text-slate-900">"Explicit Knowledge"</strong> (documented processes).
+                </p>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    This isn't bureaucracy; it is the infrastructure required to scale past <strong class="text-slate-900">50 employees</strong> without grinding to a halt.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 text-center text-slate-400 text-xs border-t border-slate-200 pt-4 no-print">
+        Generated by Inocta.io MIO Engine for Pigeon • Confidential
+    </div>
+
+    <!-- Initialize navigation and chart -->
+    <script>
+        // Check authentication before loading page
+        if (typeof requireAuth === 'function') {
+            requireAuth('welcome.html');
+        } else {
+            // Wait for auth.js to load
+            window.addEventListener('load', function() {
+                if (typeof requireAuth === 'function') {
+                    requireAuth('welcome.html');
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const navContainer = document.getElementById('navigation-container');
+            if (navContainer) {
+                navContainer.innerHTML = createNavigation('communication-paradox');
+            }
+
+            // --- CHART & CALCULATOR LOGIC ---
+            const slider = document.getElementById('sizeSlider');
+            const teamDisplay = document.getElementById('teamSizeVal');
+            const linesDisplay = document.getElementById('linesVal');
+            const ctx = document.getElementById('complexityChart').getContext('2d');
+
+            // Generate data for chart
+            const labels = Array.from({length: 51}, (_, i) => i); // 0 to 50
+            const linearData = labels; // People
+            const exponentialData = labels.map(n => n * (n - 1) / 2); // Connections
+
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Communication Complexity (Left Axis)',
+                            data: exponentialData,
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            fill: true,
+                            borderWidth: 3,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Team Size (Right Axis)',
+                            data: linearData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: '#3b82f6',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: 'Linear Headcount vs. Exponential Noise' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            title: {display:true, text: 'Number of People'},
+                            grid: { display: false }
+                        },
+                        y: { 
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {display:true, text: 'Comm. Lines'},
+                            beginAtZero: true
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {display:true, text: 'Headcount'},
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                }
+            });
+
+            // Interactive Update
+            slider.addEventListener('input', function() {
+                const n = parseInt(this.value);
+                const lines = (n * (n - 1)) / 2;
+                
+                teamDisplay.textContent = n;
+                linesDisplay.textContent = lines;
+                
+                // Change color based on 150 threshold
+                if (lines <= 150) {
+                    linesDisplay.className = 'text-5xl md:text-6xl font-bold text-green-600';
+                } else {
+                    linesDisplay.className = 'text-5xl md:text-6xl font-bold text-red-600';
+                }
+
+                // Update chart highlight
+                chart.setActiveElements([
+                    {datasetIndex: 0, index: n},
+                    {datasetIndex: 1, index: n}
+                ]);
+                chart.update();
+            });
+
+            // Initialize values and set initial color
+            const initialN = parseInt(slider.value);
+            const initialLines = (initialN * (initialN - 1)) / 2;
+            if (initialLines <= 150) {
+                linesDisplay.className = 'text-5xl md:text-6xl font-bold text-green-600';
+            } else {
+                linesDisplay.className = 'text-5xl md:text-6xl font-bold text-red-600';
+            }
+            slider.dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+</html>
+
