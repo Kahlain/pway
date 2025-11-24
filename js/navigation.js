@@ -1,7 +1,7 @@
 /**
  * Shared Navigation Component
  * Creates a navigation header that matches the existing design
- * and provides links between the Flying Wheel and Operations Sheet views
+ * and provides links between The Flywheel and Operations Sheet views
  */
 
 function createNavigation(currentPage = '') {
@@ -27,7 +27,7 @@ function createNavigation(currentPage = '') {
             <!-- Bottom Row: Page Label and Navigation -->
             <div class="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
                 <div class="text-slate-500 font-medium uppercase tracking-widest text-xs md:text-sm">
-                    ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flying Wheel v 0.8'}
+                    ${isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flywheel v 0.8'}
                 </div>
                 <nav class="flex items-center gap-2 md:gap-3 text-xs flex-wrap">
                     <a href="operations-sheet.html" 
@@ -37,7 +37,7 @@ function createNavigation(currentPage = '') {
                     <span class="text-slate-300">|</span>
                     <a href="pigeon-way.html" 
                        class="px-3 py-1.5 rounded transition-colors ${isFlyingWheel ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}">
-                        Flying Wheel
+                        The Flywheel
                     </a>
                     <span class="text-slate-300">|</span>
                     <a href="ops-rationale.html" 
@@ -117,7 +117,7 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
             React.createElement('div', {
                 key: 'label',
                 className: 'text-slate-500 font-medium uppercase tracking-widest text-xs md:text-sm'
-            }, isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flying Wheel v 0.8'),
+            }, isOperationsSheet ? 'Intelligence Operational Sheet v 0.8' : isOpsRationale ? 'Ops Rationale' : isOurServices ? 'Our Services' : 'The Flywheel v 0.8'),
             React.createElement('nav', {
                 key: 'nav',
                 className: 'flex items-center gap-2 md:gap-3 text-xs flex-wrap'
@@ -135,7 +135,7 @@ window.NavigationComponent = function NavigationComponent({ currentPage = '' }) 
                     key: 'flywheel',
                     href: 'pigeon-way.html',
                     className: `px-3 py-1.5 rounded transition-colors ${isFlyingWheel ? 'bg-slate-900 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'}`
-                }, 'Flying Wheel'),
+                }, 'The Flywheel'),
                 React.createElement('span', {
                     key: 'separator2',
                     className: 'text-slate-300'
