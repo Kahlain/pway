@@ -33,19 +33,27 @@
             appearance: none;
             background: transparent;
             cursor: pointer;
+            width: 100%;
+        }
+        
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: #4b5563;
+            height: 12px;
+            border-radius: 6px;
+            border: 1px solid #374151;
         }
         
         input[type="range"]::-webkit-slider-track {
-            background: #f1f5f9;
+            background: #4b5563;
             height: 12px;
             border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #374151;
         }
         
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            background: #3b82f6;
+            background: #ec4899;
             height: 28px;
             width: 28px;
             border-radius: 50%;
@@ -56,19 +64,19 @@
         }
         
         input[type="range"]::-webkit-slider-thumb:hover {
-            background: #2563eb;
+            background: #db2777;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
         }
         
         input[type="range"]::-moz-range-track {
-            background: #f1f5f9;
+            background: #4b5563;
             height: 12px;
             border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #374151;
         }
         
         input[type="range"]::-moz-range-thumb {
-            background: #3b82f6;
+            background: #ec4899;
             height: 28px;
             width: 28px;
             border-radius: 50%;
@@ -78,7 +86,7 @@
         }
         
         input[type="range"]::-moz-range-thumb:hover {
-            background: #2563eb;
+            background: #db2777;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
         }
         
@@ -119,7 +127,9 @@
                 <label class="block text-sm font-medium text-slate-700 mb-3">
                     Team Size: <span id="teamSizeVal" class="font-bold text-slate-900 text-lg">14</span> people
                 </label>
-                <input type="range" id="sizeSlider" min="3" max="50" value="14" class="w-full mb-6">
+                <div class="w-full mb-6 py-2">
+                    <input type="range" id="sizeSlider" min="3" max="60" value="14" class="w-full" style="background: transparent;">
+                </div>
                 
                 <span class="block text-sm font-medium text-slate-600 mb-2">Communication Lines (Points of Failure):</span>
                 <div id="linesVal" class="text-5xl md:text-6xl font-bold text-green-600 mb-4">91</div>
@@ -226,7 +236,7 @@
             const ctx = document.getElementById('complexityChart').getContext('2d');
 
             // Generate data for chart
-            const labels = Array.from({length: 51}, (_, i) => i); // 0 to 50
+            const labels = Array.from({length: 61}, (_, i) => i); // 0 to 60
             const linearData = labels; // People
             const exponentialData = labels.map(n => n * (n - 1) / 2); // Connections
 
