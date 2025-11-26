@@ -67,7 +67,7 @@
     <script>
         // Check if already authenticated
         if (window.isAuthenticated && window.isAuthenticated()) {
-            window.location.href = 'operations-sheet.html';
+            window.location.href = 'pigeon-way.html';
         }
         
         // Handle form submission
@@ -79,7 +79,7 @@
             
             if (window.authenticate && window.authenticate(password)) {
                 // Successful login
-                window.location.href = 'operations-sheet.html';
+                window.location.href = 'pigeon-way.html';
             } else {
                 // Show error
                 errorMessage.textContent = 'Incorrect password. Please try again.';

@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>The Pigeon Way - The Flywheel v 1.7</title>
+    <title>The Pigeon Way - Operations Sheet V2 (Test)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -24,6 +24,12 @@
             background-size: 20px 20px;
         }
 
+        .writing-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -31,10 +37,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 
@@ -44,6 +46,9 @@
 
     <!-- React App Root -->
     <div id="root" class="w-full max-w-[1400px] mx-auto px-4 pb-8"></div>
+
+    <!-- Legend Footer (will be inserted by legend.js) -->
+    <div id="legend-container" class="max-w-[1400px] mx-auto px-4"></div>
 
     <!-- Footer -->
     <div class="mt-12 text-center text-slate-400 text-xs border-t border-slate-200 pt-4 max-w-[1400px] mx-auto px-4">
@@ -72,11 +77,16 @@
             });
         }
         
-        // Insert navigation
+        // Insert navigation and legend
         document.addEventListener('DOMContentLoaded', function() {
             const navContainer = document.getElementById('navigation-container');
             if (navContainer) {
-                navContainer.innerHTML = createNavigation('flying-wheel');
+                navContainer.innerHTML = createNavigation('operations-sheet-v2-test');
+            }
+            
+            const legendContainer = document.getElementById('legend-container');
+            if (legendContainer && typeof createLegendHTML === 'function') {
+                legendContainer.innerHTML = createLegendHTML();
             }
         });
     </script>
@@ -209,7 +219,8 @@
                     percentage: 50,
                     gatewayAction: 'Client touch point and coordination',
                     items: [
-                        '**New Client Onboarding (*)**',
+                        'Client Relationships',
+                        '**New Client Onboarding**',
                         'Quarterly Business Reviews',
                         'Renewals & Upselling',
                         'Project Handoffs',
@@ -251,7 +262,7 @@
                     percentage: 50,
                     gatewayAction: 'Infrastructure: Assets, Support & Security',
                     items: [
-                        '**Font Purchasing (*)**',
+                        '**Font Purchasing** (*)',
                         'Troubleshooting & Support',
                         'High-level Tech Projects',
                         'Staff Training',
@@ -388,94 +399,6 @@
             );
         };
 
-        // PillarWheel Component - Adapted from flywheel-v2b.html
-        const PillarWheel = ({ stages, activeId, setActiveId }) => {
-            const radius = 160;
-            const center = 250;
-            
-            if (!stages || stages.length === 0) {
-                return <div className="text-slate-400">Loading wheel...</div>;
-            }
-            
-            return (
-                <div className="relative w-[500px] h-[600px] flex items-center justify-center -mt-10">
-                    <svg viewBox="0 0 500 600" className="w-full h-full">
-                        <defs>
-                            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                                <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
-                                <feOffset dx="0" dy="5" result="offsetblur"/>
-                                <feComponentTransfer>
-                                    <feFuncA type="linear" slope="0.3"/>
-                                </feComponentTransfer>
-                                <feMerge> 
-                                    <feMergeNode/>
-                                    <feMergeNode in="SourceGraphic"/> 
-                                </feMerge>
-                            </filter>
-                        </defs>
-                        <path d="M 230 250 L 270 250 L 270 520 L 230 520 Z" fill="#1e293b" />
-                        <path d="M 150 520 L 350 520 L 370 580 L 130 580 Z" fill="#0f172a" />
-                        <text x="250" y="560" textAnchor="middle" fill="#64748b" className="text-[10px] font-bold tracking-[0.2em] uppercase">The Support Engine</text>
-                        <circle cx="190" cy="540" r="3" fill="#cbd5e1" />
-                        <circle cx="230" cy="540" r="3" fill="#cbd5e1" />
-                        <circle cx="270" cy="540" r="3" fill="#cbd5e1" />
-                        <circle cx="310" cy="540" r="3" fill="#cbd5e1" />
-
-                        <g filter="url(#softShadow)">
-                            {stages.map((stage, index) => {
-                                const totalStages = stages.length;
-                                const anglePerStage = 360 / totalStages;
-                                const startAngle = (index * anglePerStage) - 90;
-                                const endAngle = ((index + 1) * anglePerStage) - 90;
-                                const isActive = activeId === stage.id;
-                                const x1 = center + radius * Math.cos(Math.PI * (startAngle) / 180);
-                                const y1 = center + radius * Math.sin(Math.PI * (startAngle) / 180);
-                                const x2 = center + radius * Math.cos(Math.PI * (endAngle) / 180);
-                                const y2 = center + radius * Math.sin(Math.PI * (endAngle) / 180);
-                                const innerRadius = 90;
-                                const ix1 = center + innerRadius * Math.cos(Math.PI * (endAngle) / 180);
-                                const iy1 = center + innerRadius * Math.sin(Math.PI * (endAngle) / 180);
-                                const ix2 = center + innerRadius * Math.cos(Math.PI * (startAngle) / 180);
-                                const iy2 = center + innerRadius * Math.sin(Math.PI * (startAngle) / 180);
-                                const pathData = `M ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} L ${ix1} ${iy1} A ${innerRadius} ${innerRadius} 0 0 0 ${ix2} ${iy2} Z`;
-                                const midAngle = startAngle + (anglePerStage / 2);
-                                const labelR = (radius + innerRadius) / 2;
-                                const tx = center + labelR * Math.cos(Math.PI * midAngle / 180);
-                                const ty = center + labelR * Math.sin(Math.PI * midAngle / 180);
-
-                                return (
-                                    <g key={stage.id} onClick={() => setActiveId(stage.id)} className="cursor-pointer group">
-                                        <path 
-                                            d={pathData} 
-                                            fill={stage.color}
-                                            stroke="white"
-                                            strokeWidth="4"
-                                            className="transition-all duration-300"
-                                            style={{
-                                                opacity: isActive ? 1 : 0.8, 
-                                                transformOrigin: 'center', 
-                                                transform: isActive ? 'scale(1.05)' : 'scale(1)'
-                                            }}
-                                        />
-                                        <text x={tx} y={ty} textAnchor="middle" dominantBaseline="middle" fill="white" className="text-2xl font-bold font-serif opacity-90 pointer-events-none">{stage.id}</text>
-                                    </g>
-                                )
-                            })}
-                        </g>
-                        <circle cx={center} cy={center} r="75" fill="white" filter="url(#softShadow)" />
-                        <circle cx={center} cy={center} r="70" fill="white" stroke="#e2e8f0" strokeWidth="1" />
-                        <foreignObject x={center - 50} y={center - 50} width="100" height="100">
-                            <div className="w-full h-full flex flex-col items-center justify-center text-center pointer-events-none">
-                                <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Truth.</span>
-                                <span className="text-2xl font-bold text-slate-900 serif leading-tight">Client</span>
-                                <span className="text-[9px] font-bold tracking-widest text-slate-400 uppercase">Delivered.</span>
-                            </div>
-                        </foreignObject>
-                    </svg>
-                </div>
-            )
-        }
-
         // Main App Component
         const App = () => {
             const [stages, setStages] = useState([]);
@@ -498,10 +421,20 @@
                 }
             }, []);
 
+            const isPillarActive = (pillarId) => {
+                const currentStage = stages.find(s => s.id === activeId);
+                return currentStage?.activePillars.includes(pillarId);
+            };
+
+            const getGateway = (pillarId) => {
+                const currentStage = stages.find(s => s.id === activeId);
+                return currentStage?.gateway ? currentStage.gateway[pillarId] : null;
+            };
+
             if (loading) {
                 return (
                     <div className="w-full flex items-center justify-center py-20">
-                        <div className="text-slate-400">Loading flywheel...</div>
+                        <div className="text-slate-400">Loading operations sheet...</div>
                     </div>
                 );
             }
@@ -514,173 +447,211 @@
                 );
             }
 
-            const activeStage = stages.find(s => s.id === activeId);
-
             return (
-                <div className="w-full flex flex-col gap-8">
+                <div className="w-full flex flex-col gap-3">
                     
-                    {/* MAIN CONTENT AREA */}
-                    <div className="flex flex-col lg:flex-row gap-0 items-center lg:items-start h-auto lg:h-[600px]">
-                        
-                        {/* LEFT: THE PILLAR WHEEL */}
-                        <div className="w-full lg:w-1/3 flex flex-col items-center justify-start pt-10 h-full relative">
-                            <div className="absolute top-0 left-0 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">The Client Cycle ({stages.length} Stages)</div>
-                            <PillarWheel stages={stages} activeId={activeId} setActiveId={setActiveId} />
-                        </div>
+                    {/* LABEL: CLIENT PROCESS */}
+                    <div className="flex items-center gap-3 md:gap-4 px-2 mb-4">
+                        <div className="text-xs md:text-sm font-bold text-slate-900 bg-slate-100 border border-slate-300 px-4 py-2 rounded-md uppercase tracking-wider shadow-sm">The Client Process (Dynamic)</div>
+                        <div className="h-px bg-slate-300 flex-grow"></div>
+                    </div>
 
-                        {/* RIGHT: THE DETAIL CARD */}
-                        <div className="w-full lg:w-2/3 h-full pt-10">
-                            <AnimatePresence mode="wait">
+                    {/* STAGE CARDS ROW */}
+                    <div className="flex flex-col md:flex-row gap-4 min-h-[650px] md:h-[650px] items-start w-full perspective-1000">
+                        {stages.map((stage) => {
+                            const isActive = activeId === stage.id;
+                            
+                            return (
                                 <motion.div 
-                                    key={activeStage.id}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0, zIndex: 10 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="bg-white rounded-xl shadow-2xl overflow-hidden border-t-8 flex flex-col pb-6 min-h-[600px] relative z-10"
-                                    style={{ borderColor: activeStage.color }}
+                                    key={stage.id}
+                                    layout
+                                    onClick={() => setActiveId(stage.id)}
+                                    initial={{ borderRadius: 12 }}
+                                    animate={{ 
+                                        flex: isActive ? 4 : 1,
+                                        opacity: isActive ? 1 : 0.8,
+                                        scale: isActive ? 1 : 0.98,
+                                        zIndex: isActive ? 10 : 1
+                                    }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                                    className={`relative bg-white shadow-xl overflow-hidden cursor-pointer border-t-8 flex flex-col md:h-full min-h-[200px] md:min-h-0 group hover:shadow-2xl transition-shadow ${isActive ? 'z-10' : 'z-1'}`}
+                                    style={{ borderColor: stage.color }}
                                 >
-                                    {/* Card Header */}
-                                    <div className="p-4 md:p-5 pb-3 shrink-0 border-b border-slate-100">
-                                        {/* Top Row: Step Number & Engine Badge */}
-                                        <div className="flex items-center justify-between mb-3">
-                                            <div className="text-[11px] font-bold uppercase tracking-widest" style={{color: activeStage.color}}>
-                                                STEP {activeStage.id}
-                                            </div>
-                                            {activeStage.engine && (
-                                                <span className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style={{backgroundColor: activeStage.color, color: activeStage.textColor}}>
-                                                    {activeStage.engine}
-                                                </span>
-                                            )}
-                                        </div>
-                                        
-                                        {/* Main Content Grid */}
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                                            {/* Left Column: Title, Tagline, Description */}
-                                            <div className="md:col-span-2 space-y-3">
-                                                <div>
-                                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 leading-tight">{activeStage.name}</h2>
-                                                    <p className="serif italic text-slate-500 text-base md:text-lg">"{activeStage.tagline}"</p>
+                                    
+                                    {/* EXPANDED CONTENT */}
+                                    {isActive ? (
+                                        <motion.div 
+                                            layout
+                                            initial={{opacity:0}} 
+                                            animate={{opacity:1}} 
+                                            transition={{duration: 0.3}}
+                                            className="flex flex-col min-h-[650px]"
+                                        >
+                                            {/* Header - Redesigned for Better Space & Hierarchy */}
+                                            <div className="p-4 md:p-5 pb-3 shrink-0 border-b border-slate-100">
+                                                {/* Top Row: Step Number & Engine Badge */}
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <div className="text-[11px] font-bold uppercase tracking-widest" style={{color: stage.color}}>
+                                                        STEP {stage.id}
+                                                    </div>
+                                                    {stage.engine && (
+                                                        <span className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style={{backgroundColor: stage.color, color: stage.textColor}}>
+                                                            {stage.engine}
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 
-                                                {/* Description */}
-                                                {activeStage.description && (
-                                                    <motion.div 
-                                                        initial={{opacity: 0, y: -5}} 
-                                                        animate={{opacity: 1, y: 0}} 
-                                                        transition={{delay: 0.15}}
-                                                        className="pl-4 pr-3 py-2.5 bg-slate-50 rounded-r-lg border-l-2"
-                                                        style={{borderColor: activeStage.color}}
-                                                    >
-                                                        <p className="text-sm text-slate-600 leading-relaxed">{activeStage.description}</p>
-                                                    </motion.div>
-                                                )}
-                                            </div>
-                                            
-                                            {/* Right Column: Metrics Card with KPI */}
-                                            <div className="md:col-span-1">
-                                                <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm h-full flex flex-col justify-center">
-                                                    {/* KPI Percentage - Large and Prominent */}
-                                                    <div className="text-center mb-3">
-                                                        <motion.div 
-                                                            initial={{scale: 0.8, opacity: 0}} 
-                                                            animate={{scale: 1, opacity: 1}} 
-                                                            transition={{duration: 0.5, delay: 0.2}}
-                                                            className="text-4xl md:text-5xl font-bold leading-none mb-1"
-                                                            style={{color: activeStage.color}}
-                                                        >
-                                                            {activeStage.health}%
-                                                        </motion.div>
+                                                {/* Main Content Grid */}
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                                                    {/* Left Column: Title, Tagline, Description */}
+                                                    <div className="md:col-span-2 space-y-3">
+                                                        <div>
+                                                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 leading-tight">{stage.name}</h2>
+                                                            <p className="serif italic text-slate-500 text-base md:text-lg">"{stage.tagline}"</p>
+                                                        </div>
+                                                        
+                                                        {/* Description */}
+                                                        {stage.description && (
+                                                            <motion.div 
+                                                                initial={{opacity: 0, y: -5}} 
+                                                                animate={{opacity: 1, y: 0}} 
+                                                                transition={{delay: 0.15}}
+                                                                className="pl-4 pr-3 py-2.5 bg-slate-50 rounded-r-lg border-l-2"
+                                                                style={{borderColor: stage.color}}
+                                                            >
+                                                                <p className="text-sm text-slate-600 leading-relaxed">{stage.description}</p>
+                                                            </motion.div>
+                                                        )}
                                                     </div>
                                                     
-                                                    {/* Label */}
-                                                    <div className="text-center mb-3">
-                                                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-tight">
-                                                            Documentation<br />Standard
+                                                    {/* Right Column: Metrics Card with KPI */}
+                                                    <div className="md:col-span-1">
+                                                        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm h-full flex flex-col justify-center">
+                                                            {/* KPI Percentage - Large and Prominent */}
+                                                            <div className="text-center mb-3">
+                                                                <motion.div 
+                                                                    initial={{scale: 0.8, opacity: 0}} 
+                                                                    animate={{scale: 1, opacity: 1}} 
+                                                                    transition={{duration: 0.5, delay: 0.2}}
+                                                                    className="text-4xl md:text-5xl font-bold leading-none mb-1"
+                                                                    style={{color: stage.color}}
+                                                                >
+                                                                    {stage.health}%
+                                                                </motion.div>
+                                                            </div>
+                                                            
+                                                            {/* Label */}
+                                                            <div className="text-center mb-3">
+                                                                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-tight">
+                                                                    Documentation<br />Standard
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            {/* Progress Bar */}
+                                                            <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                                                                <motion.div 
+                                                                    initial={{width: 0}} 
+                                                                    animate={{width: `${stage.health}%`}} 
+                                                                    transition={{duration: 0.8, ease: "easeOut", delay: 0.3}}
+                                                                    className="h-full rounded-full" 
+                                                                    style={{backgroundColor: stage.color}}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <motion.div 
+                                                layout
+                                                className="flex-grow overflow-y-auto no-scrollbar"
+                                            >
+                                                {/* Body Content (People & Process) - Redesigned for Space Efficiency */}
+                                                <div className="px-4 md:px-6 py-4 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                                    {/* Our People Section - Compact Design */}
+                                                    <div className="space-y-3">
+                                                        <h3 className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-2">
+                                                            <span className="w-2 h-2 rounded-full" style={{backgroundColor: stage.color}}></span> Our People
+                                                        </h3>
+                                                        
+                                                        {/* The Experts - Inline Layout */}
+                                                        <div className="space-y-1.5 pb-3 border-b border-slate-200">
+                                                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">The Experts</div>
+                                                            <div className="text-sm font-medium text-slate-700 leading-relaxed">
+                                                                <HighlightText text={stage.people.role} />
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {/* The Coordinators - Inline Layout */}
+                                                        <div className="space-y-1.5">
+                                                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">The Coordinators</div>
+                                                            <div className="text-sm font-medium text-slate-700 leading-relaxed">
+                                                                <HighlightText text={stage.people.sub} />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     
-                                                    {/* Progress Bar */}
-                                                    <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-                                                        <motion.div 
-                                                            initial={{width: 0}} 
-                                                            animate={{width: `${activeStage.health}%`}} 
-                                                            transition={{duration: 0.8, ease: "easeOut", delay: 0.3}}
-                                                            className="h-full rounded-full" 
-                                                            style={{backgroundColor: activeStage.color}}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Card Body */}
-                                    <motion.div 
-                                        layout
-                                        className="flex-grow overflow-y-auto custom-scroll p-4 md:p-6"
-                                    >
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6">
-                                            {/* Our People Section - Compact Design */}
-                                            <div className="space-y-3">
-                                                <h3 className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full" style={{backgroundColor: activeStage.color}}></span> Our People
-                                                </h3>
-                                                
-                                                {/* The Experts - Inline Layout */}
-                                                <div className="space-y-1.5 pb-3 border-b border-slate-200">
-                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">The Experts</div>
-                                                    <div className="text-sm font-medium text-slate-700 leading-relaxed">
-                                                        <HighlightText text={activeStage.people.role} />
-                                                    </div>
-                                                </div>
-                                                
-                                                {/* The Coordinators - Inline Layout */}
-                                                <div className="space-y-1.5">
-                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">The Coordinators</div>
-                                                    <div className="text-sm font-medium text-slate-700 leading-relaxed">
-                                                        <HighlightText text={activeStage.people.sub} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Front Process Section - Compact List Design */}
-                                            <div className="space-y-3">
-                                                <h3 className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full" style={{backgroundColor: activeStage.color}}></span> Our Processes ({activeStage.process.length})
-                                                </h3>
-                                                
-                                                <div className="space-y-2">
-                                                    {activeStage.process.map((p, i) => {
-                                                        // Get background and border colors based on status
-                                                        const statusStyles = {
-                                                            'NEW': { bg: 'bg-indigo-50', border: 'border-l-indigo-400' },
-                                                            'ACTIVE': { bg: 'bg-slate-50', border: 'border-l-slate-300' },
-                                                            'TODO': { bg: 'bg-orange-50', border: 'border-l-orange-400' },
-                                                            'MERGE': { bg: 'bg-red-50', border: 'border-l-red-400' }
-                                                        };
-                                                        const style = statusStyles[p.status] || statusStyles['ACTIVE'];
+                                                    {/* Front Process Section - Compact List Design */}
+                                                    <div className="space-y-3">
+                                                        <h3 className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-2">
+                                                            <span className="w-2 h-2 rounded-full" style={{backgroundColor: stage.color}}></span> Our Processes ({stage.process.length})
+                                                        </h3>
                                                         
-                                                        return (
-                                                            <div 
-                                                                key={i} 
-                                                                className={`${style.bg} ${style.border} border-l-2 pl-3 pr-3 py-2.5 rounded-r flex items-center justify-between group hover:shadow-sm transition-shadow`}
-                                                            >
-                                                                <div className="text-sm font-medium text-slate-700 flex-1">{p.name}</div>
-                                                                <ProcessBadge status={p.status} color={activeStage.color} />
-                                                            </div>
-                                                        );
-                                                    })}
+                                                        <div className="space-y-2">
+                                                            {stage.process.map((p, i) => {
+                                                                // Get background and border colors based on status
+                                                                const statusStyles = {
+                                                                    'NEW': { bg: 'bg-indigo-50', border: 'border-l-indigo-400' },
+                                                                    'ACTIVE': { bg: 'bg-slate-50', border: 'border-l-slate-300' },
+                                                                    'TODO': { bg: 'bg-orange-50', border: 'border-l-orange-400' },
+                                                                    'MERGE': { bg: 'bg-red-50', border: 'border-l-red-400' }
+                                                                };
+                                                                const style = statusStyles[p.status] || statusStyles['ACTIVE'];
+                                                                
+                                                                return (
+                                                                    <div 
+                                                                        key={i} 
+                                                                        className={`${style.bg} ${style.border} border-l-2 pl-3 pr-3 py-2.5 rounded-r flex items-center justify-between group hover:shadow-sm transition-shadow`}
+                                                                    >
+                                                                        <div className="text-sm font-medium text-slate-700 flex-1">{p.name}</div>
+                                                                        <ProcessBadge status={p.status} color={stage.color} />
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* THE INTELLIGENCE LAYER (Accordion) */}
+                                                <AIDataSection aiData={stage.aiData} stageColor={stage.color} />
+                                            </motion.div>
+                                        </motion.div>
+                                    ) : (
+                                        /* COLLAPSED CONTENT */
+                                        <div className="flex flex-col h-full relative">
+                                            {/* Top colored band */}
+                                            <div className="h-2 rounded-t-lg" style={{backgroundColor: stage.color}}></div>
+                                            
+                                            {/* Main content */}
+                                            <div className="flex-1 flex flex-col justify-center items-center p-4 relative min-h-[150px]">
+                                                <div className="text-center">
+                                                    <div className="text-[10px] font-bold uppercase mb-2" style={{color: stage.color}}>STEP {stage.id}</div>
+                                                    <h2 className="text-xl md:text-2xl font-bold text-slate-800">{stage.name}</h2>
+                                                </div>
+                                                
+                                                {/* CLICK TO VIEW indicator */}
+                                                <div className="absolute bottom-4 right-4 hidden md:flex items-center gap-2">
+                                                    <div className="w-px h-8 bg-slate-300"></div>
+                                                    <div className="text-[9px] font-medium text-slate-400 uppercase tracking-wider" style={{writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'rotate(180deg)'}}>
+                                                        CLICK TO VIEW
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        {/* THE INTELLIGENCE LAYER (Accordion) */}
-                                        <AIDataSection aiData={activeStage.aiData} stageColor={activeStage.color} />
-                                    </motion.div>
+                                    )}
                                 </motion.div>
-                            </AnimatePresence>
-                        </div>
+                            );
+                        })}
                     </div>
 
                     {/* LABEL: SUPPORT ENGINE (SOCLE) - Reversed Colors */}
@@ -706,46 +677,9 @@
 
                         {/* Support Engine Footer - 6 Pillars in Connected Grid */}
                         <SupportEngineFooter 
-                            activePillars={activeStage?.activePillars || []}
-                            gatewayActions={activeStage?.gateway || {}}
+                            activePillars={stages.find(s => s.id === activeId)?.activePillars || []}
+                            gatewayActions={stages.find(s => s.id === activeId)?.gateway || {}}
                         />
-                    </div>
-
-                    {/* Legend */}
-                    {typeof window.LegendComponent !== 'undefined' && React.createElement(window.LegendComponent)}
-
-                    {/* Video Card */}
-                    <div className="mt-8 bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
-                        <h3 className="text-lg font-bold text-slate-900 mb-4 serif">
-                            The Flywheel Concept from GOOD TO GREAT - In Just 2 Minutes
-                        </h3>
-                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                            <iframe
-                                className="absolute top-0 left-0 w-full h-full rounded-lg"
-                                src="https://www.youtube.com/embed/lUOe4GwPyFM"
-                                title="The Flywheel Concept from GOOD TO GREAT - In Just 2 Minutes"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            ></iframe>
-                        </div>
-                    </div>
-
-                    {/* Second Video Card */}
-                    <div className="mt-8 bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
-                        <h3 className="text-lg font-bold text-slate-900 mb-4 serif">
-                            The Flywheel Concept That Will Change Your Business - In Just 24 Minutes
-                        </h3>
-                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                            <iframe
-                                className="absolute top-0 left-0 w-full h-full rounded-lg"
-                                src="https://www.youtube.com/embed/drjzFJ2ZQu8"
-                                title="The Flywheel Concept That Will Change Your Business - In Just 24 Minutes"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            ></iframe>
-                        </div>
                     </div>
                 </div>
             );

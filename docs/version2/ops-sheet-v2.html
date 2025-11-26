@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pigeon Way - Documentation Standard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; overflow-x: hidden; }
+        .serif { font-family: 'Playfair Display', serif; }
+        
+        .socle-bg {
+            background-color: #0f172a;
+            background-image: linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .writing-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="root" class="w-full max-w-[1400px]"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        // --- DATA STRUCTURE ---
+        const stages = [
+            {
+                id: 1,
+                name: "DISCOVER",
+                tagline: "We uncover potential.",
+                color: "#D6407D", // Pink
+                health: 30, // 30% Standard
+                people: { role: "Sales Leads", sub: "Account Directors (AS)" },
+                process: [ { name: "Lead Mgmt", status: "NEW" }, { name: "Sales Process", status: "NEW" } ],
+                aiData: {
+                    rule: "Protect Revenue Velocity. Don't document relationship building; only document the container.",
+                    docs: ["CRM Deal Stages", "Pricing/Contracts", "Client Brief Intake"],
+                    implication: "Automated administrative offloading (Lead Scraping, CRM entry) rather than replacing core tasks."
+                },
+                requiredSupport: [
+                    { dept: "Finance", task: "Contracts", desc: "Lock terms." },
+                    { dept: "People", task: "Forecasting", desc: "Check capacity." }
+                ],
+                activePillars: ["finance", "people"]
+            },
+            {
+                id: 2,
+                name: "DEFINE",
+                tagline: "We seek the truth.",
+                color: "#84cc16", // Lime
+                health: 65, // 65% Standard
+                people: { role: "Strategists", sub: "Subject Matter Experts" },
+                process: [ { name: "Client Brief", status: "ACTIVE" }, { name: "Onboarding", status: "ACTIVE" } ],
+                aiData: {
+                    rule: "Standardize inputs to standard outputs. Garbage in, garbage out.",
+                    docs: ["Strategic Briefs", "Audience Personas", "Competitor Data"],
+                    implication: "Generative AI can draft initial strategy decks if the Brief Data is structured correctly."
+                },
+                requiredSupport: [
+                    { dept: "IT & Ops", task: "Tech Stack", desc: "Setup tools." },
+                    { dept: "Finance", task: "Budgets", desc: "Set burn rate." }
+                ],
+                activePillars: ["it", "finance"]
+            },
+            {
+                id: 3,
+                name: "DEVELOP",
+                tagline: "We build the solution.",
+                color: "#E98C38", // Orange
+                health: 45, // 45% Standard
+                people: { role: "Creatives", sub: "Design Leads" },
+                process: [ { name: "Packaging", status: "ACTIVE" } ],
+                aiData: {
+                    rule: "Tag assets metadata immediately. An untagged asset is an invisible asset.",
+                    docs: ["Asset Libraries", "Version Control", "Prompt Libraries"],
+                    implication: "AI-driven asset retrieval and variation generation (e.g., resizing for social) speeds up delivery."
+                },
+                requiredSupport: [
+                    { dept: "IT & Ops", task: "Assets", desc: "Secure storage." }
+                ],
+                activePillars: ["it"]
+            },
+            {
+                id: 4,
+                name: "DELIVER",
+                tagline: "We make it real.",
+                color: "#231F20", // Black
+                health: 80, // 80% Standard
+                people: { role: "Producers", sub: "QA Team" },
+                process: [ { name: "Production", status: "ACTIVE" } ],
+                aiData: {
+                    rule: "Compliance is binary. Use checklists to feed the validation engine.",
+                    docs: ["QA Checklists", "Release Notes", "Compliance Logs"],
+                    implication: "Automated QA testing and compliance scanning against legal frameworks."
+                },
+                requiredSupport: [
+                     { dept: "Finance", task: "Billing", desc: "Invoicing & AP." }
+                ],
+                activePillars: ["finance"]
+            },
+            {
+                id: 5,
+                name: "DYNAMIZE",
+                tagline: "We grow together.",
+                color: "#64748b", // Slate
+                health: 25, // 25% Standard
+                people: { role: "Executives", sub: "Strategists" },
+                process: [ { name: "Feedback", status: "TODO" }, { name: "Optimization", status: "TODO" } ],
+                aiData: {
+                    rule: "Capture the 'Why'. Data tells us what happened; notes tell us why.",
+                    docs: ["Retro Notes", "Client Feedback", "Performance Data"],
+                    implication: "Predictive analytics for client retention and automated case study generation."
+                },
+                requiredSupport: [
+                     { dept: "Marketing", task: "Case Studies", desc: "Leverage success." },
+                     { dept: "People", task: "eNPS", desc: "Team sentiment." }
+                ],
+                activePillars: ["marketing", "people"]
+            }
+        ];
+
+        const ProcessBadge = ({ status, color }) => (
+            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded text-white`} style={{backgroundColor: status === 'NEW' ? '#4f46e5' : (status === 'TODO' ? '#f59e0b' : color)}}>
+                {status}
+            </span>
+        );
+
+        const App = () => {
+            const [activeId, setActiveId] = useState(1);
+
+            const isPillarActive = (pillarId) => {
+                const currentStage = stages.find(s => s.id === activeId);
+                return currentStage?.activePillars.includes(pillarId);
+            };
+
+            return (
+                <div className="w-full flex flex-col gap-6">
+                    
+                    {/* TOP HEADER */}
+                    <div className="flex justify-between items-end border-b-2 border-slate-900 pb-4">
+                        <div>
+                            <h1 className="serif text-4xl font-bold text-slate-900">The Pigeon Way</h1>
+                            <div className="flex items-center gap-3 mt-2">
+                                <span className="text-xs font-bold bg-slate-900 text-white px-2 py-1 rounded tracking-wider uppercase">ACE Model</span>
+                                <span className="text-xs font-medium text-slate-500 uppercase tracking-widest">Interactive Operations Map</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* LABEL: CLIENT PROCESS */}
+                    <div className="flex items-center gap-4 px-2">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">The Client Process (Dynamic)</div>
+                        <div className="h-px bg-slate-200 flex-grow"></div>
+                    </div>
+
+                    {/* STAGE CARDS ROW */}
+                    <div className="flex gap-4 h-[650px] items-start w-full perspective-1000">
+                        {stages.map((stage) => {
+                            const isActive = activeId === stage.id;
+                            
+                            return (
+                                <motion.div 
+                                    key={stage.id}
+                                    layout
+                                    onClick={() => setActiveId(stage.id)}
+                                    initial={{ borderRadius: 12 }}
+                                    animate={{ 
+                                        flex: isActive ? 4 : 1,
+                                        opacity: isActive ? 1 : 0.8,
+                                        scale: isActive ? 1 : 0.98
+                                    }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                                    className={`relative bg-white shadow-xl overflow-hidden cursor-pointer border-t-8 flex flex-col h-full group hover:shadow-2xl transition-shadow`}
+                                    style={{ borderColor: stage.color }}
+                                >
+                                    
+                                    {/* EXPANDED CONTENT */}
+                                    {isActive ? (
+                                        <div className="flex flex-col h-full">
+                                            {/* Header */}
+                                            <motion.div initial={{opacity:0}} animate={{opacity:1}} className="p-6 pb-2 shrink-0">
+                                                <div className="flex justify-between items-start gap-4">
+                                                    <div>
+                                                        <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{color: stage.color}}>Step {stage.id}</div>
+                                                        <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-1">{stage.name}</h2>
+                                                        <p className="serif italic text-slate-500 text-lg">"{stage.tagline}"</p>
+                                                    </div>
+                                                    
+                                                    {/* UPDATED HEALTH BAR */}
+                                                    <div className="bg-slate-50 border border-slate-100 rounded p-2 hidden sm:block min-w-[140px]">
+                                                        <div className="flex justify-between items-center mb-1 gap-2">
+                                                            <div className="text-[9px] font-bold text-slate-400 uppercase">Documentation Standard</div>
+                                                            <div className="text-[9px] font-bold" style={{color: stage.color}}>{stage.health}%</div>
+                                                        </div>
+                                                        <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                                            <motion.div 
+                                                                initial={{width: 0}} 
+                                                                animate={{width: `${stage.health}%`}} 
+                                                                className="h-full" 
+                                                                style={{backgroundColor: stage.color}}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+
+                                            <div className="flex-grow overflow-y-auto no-scrollbar">
+                                                {/* Body Content (People & Process) */}
+                                                <motion.div 
+                                                    initial={{opacity: 0, y: 10}} 
+                                                    animate={{opacity: 1, y: 0}} 
+                                                    transition={{delay: 0.1}}
+                                                    className="px-6 py-2 grid grid-cols-1 md:grid-cols-2 gap-4"
+                                                >
+                                                    <div>
+                                                        <h3 className="text-[10px] font-bold text-slate-400 uppercase mb-2 flex items-center gap-2">
+                                                            <span className="w-2 h-2 rounded-full" style={{backgroundColor: stage.color}}></span> People
+                                                        </h3>
+                                                        <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                                            <div className="text-sm font-bold text-slate-800">{stage.people.role}</div>
+                                                            <div className="text-xs text-slate-500">{stage.people.sub}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-[10px] font-bold text-slate-400 uppercase mb-2 flex items-center gap-2">
+                                                            <span className="w-2 h-2 rounded-full" style={{backgroundColor: stage.color}}></span> Front Process
+                                                        </h3>
+                                                        <div className="space-y-1">
+                                                            {stage.process.map((p, i) => (
+                                                                <div key={i} className="flex justify-between items-center bg-white border border-slate-200 p-2 rounded shadow-sm">
+                                                                    <span className="text-xs font-semibold text-slate-700">{p.name}</span>
+                                                                    <ProcessBadge status={p.status} color={stage.color} />
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+
+                                                {/* THE INTELLIGENCE LAYER */}
+                                                <motion.div 
+                                                    initial={{opacity: 0, scale: 0.95}} 
+                                                    animate={{opacity: 1, scale: 1}} 
+                                                    transition={{delay: 0.2}}
+                                                    className="mx-6 mt-4 p-4 rounded-lg border border-l-4"
+                                                    style={{backgroundColor: `${stage.color}10`, borderColor: stage.color}}
+                                                >
+                                                    <div className="flex justify-between items-center mb-3">
+                                                        <span className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2" style={{color: stage.color}}>
+                                                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" /></svg>
+                                                            Documentation & AI Potential
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <div className="space-y-3">
+                                                        <div>
+                                                            <div className="text-[9px] font-bold text-slate-400 uppercase">The Rule</div>
+                                                            <div className="text-xs font-medium text-slate-800 italic">"{stage.aiData.rule}"</div>
+                                                        </div>
+                                                        
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                            <div>
+                                                                <div className="text-[9px] font-bold text-slate-400 uppercase mb-1">What to Document</div>
+                                                                <ul className="list-disc list-inside">
+                                                                    {stage.aiData.docs.map((doc, idx) => (
+                                                                        <li key={idx} className="text-[10px] text-slate-600">{doc}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                            <div>
+                                                                <div className="text-[9px] font-bold text-slate-400 uppercase mb-1">AI Implication</div>
+                                                                <div className="text-[10px] text-slate-600 leading-relaxed">{stage.aiData.implication}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            </div>
+
+                                            {/* THE GATEWAY (Dark Footer) */}
+                                            <div className="bg-slate-900 p-5 mt-auto relative z-20 shrink-0">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <span className="text-[9px] font-bold text-white uppercase tracking-widest border border-slate-600 px-2 py-0.5 rounded-full flex items-center gap-2">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></span>
+                                                        Stage Requirements
+                                                    </span>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    {stage.requiredSupport.map((req, idx) => (
+                                                        <div key={idx} className="flex gap-3 items-start group">
+                                                            <div className="w-8 h-8 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                                                                {req.dept.substring(0,3).toUpperCase()}
+                                                            </div>
+                                                            <div>
+                                                                <div className="text-white text-xs font-bold">{req.task}</div>
+                                                                <div className="text-slate-400 text-[10px]">{req.desc}</div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                
+                                                {/* Downward Connector Arrow */}
+                                                <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 text-slate-900 z-30 drop-shadow-lg">
+                                                    <svg width="24" height="12" viewBox="0 0 24 12" fill="currentColor"><path d="M0 0 L12 12 L24 0 H0 Z"/></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        /* COLLAPSED CONTENT */
+                                        <div className="p-4 flex flex-col h-full justify-between items-center text-center">
+                                            <div className="w-full pt-4">
+                                                <div className="text-[10px] font-bold uppercase mb-2" style={{color: stage.color}}>Step {stage.id}</div>
+                                                <h2 className="text-lg font-bold text-slate-900 writing-vertical py-4">{stage.name}</h2>
+                                            </div>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+
+                    {/* CONNECTOR VISUAL */}
+                    <div className="w-full h-8 relative overflow-hidden flex flex-col justify-center items-center">
+                        <div className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-0.5 bg-gradient-to-b from-slate-900 to-[#0f172a] opacity-50"></div>
+                    </div>
+
+                    {/* LABEL: SOCLE */}
+                    <div className="flex items-center gap-4 px-2">
+                        <div className="text-[10px] font-bold text-slate-800 bg-slate-200 px-2 py-1 rounded uppercase tracking-[0.2em]">The Support Engine (Socle)</div>
+                        <div className="h-px bg-slate-300 flex-grow"></div>
+                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Always On • 24/7/365</div>
+                    </div>
+
+                    {/* SOCLE FOOTER (5 PILLARS - ALWAYS ON) */}
+                    <div className="socle-bg rounded-xl shadow-2xl p-6 text-slate-300 grid grid-cols-2 md:grid-cols-5 gap-4 border-t-8 border-slate-800 relative z-10">
+                        
+                        {/* 1. FINANCE */}
+                        <div className={`p-4 rounded border transition-all duration-300 ${isPillarActive('finance') ? 'bg-slate-800 border-[#84cc16] shadow-[0_0_15px_rgba(132,204,22,0.1)]' : 'bg-slate-900/50 border-slate-800 opacity-100'}`}>
+                            <div className="flex items-center gap-2 mb-3">
+                                <div className={`w-2 h-2 rounded-full ${isPillarActive('finance') ? 'bg-[#84cc16] shadow-[0_0_8px_#84cc16]' : 'bg-slate-600'}`}></div>
+                                <div className={`font-bold text-sm ${isPillarActive('finance') ? 'text-white' : 'text-slate-400'}`}>Finance</div>
+                            </div>
+                            <ul className="space-y-2">
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Budgets & Cashflow</li>
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Billing & AP</li>
+                                <li className={`text-[10px] border-l pl-2 font-bold transition-colors ${isPillarActive('finance') ? 'text-white border-[#84cc16]' : 'text-slate-500 border-slate-700'}`}>Active Contracts</li>
+                            </ul>
+                        </div>
+
+                        {/* 2. PEOPLE */}
+                        <div className={`p-4 rounded border transition-all duration-300 ${isPillarActive('people') ? 'bg-slate-800 border-[#D6407D] shadow-[0_0_15px_rgba(214,64,125,0.1)]' : 'bg-slate-900/50 border-slate-800 opacity-100'}`}>
+                            <div className="flex items-center gap-2 mb-3">
+                                <div className={`w-2 h-2 rounded-full ${isPillarActive('people') ? 'bg-[#D6407D] shadow-[0_0_8px_#D6407D]' : 'bg-slate-600'}`}></div>
+                                <div className={`font-bold text-sm ${isPillarActive('people') ? 'text-white' : 'text-slate-400'}`}>People</div>
+                            </div>
+                            <ul className="space-y-2">
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Recruiting</li>
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Onboarding</li>
+                                <li className={`text-[10px] border-l pl-2 font-bold transition-colors ${isPillarActive('people') ? 'text-white border-[#D6407D]' : 'text-slate-500 border-slate-700'}`}>Resource Planning</li>
+                            </ul>
+                        </div>
+
+                        {/* 3. IT & OPS */}
+                        <div className={`p-4 rounded border transition-all duration-300 ${isPillarActive('it') ? 'bg-slate-800 border-[#E98C38] shadow-[0_0_15px_rgba(233,140,56,0.1)]' : 'bg-slate-900/50 border-slate-800 opacity-100'}`}>
+                            <div className="flex items-center gap-2 mb-3">
+                                <div className={`w-2 h-2 rounded-full ${isPillarActive('it') ? 'bg-[#E98C38] shadow-[0_0_8px_#E98C38]' : 'bg-slate-600'}`}></div>
+                                <div className={`font-bold text-sm ${isPillarActive('it') ? 'text-white' : 'text-slate-400'}`}>IT & Ops</div>
+                            </div>
+                            <ul className="space-y-2">
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Support & Assets</li>
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Data Security</li>
+                                <li className={`text-[10px] border-l pl-2 font-bold transition-colors ${isPillarActive('it') ? 'text-white border-[#E98C38]' : 'text-slate-500 border-slate-700'}`}>Tech Stack</li>
+                            </ul>
+                        </div>
+
+                         {/* 4. MARKETING */}
+                         <div className={`p-4 rounded border transition-all duration-300 ${isPillarActive('marketing') ? 'bg-slate-800 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.1)]' : 'bg-slate-900/50 border-slate-800 opacity-100'}`}>
+                            <div className="flex items-center gap-2 mb-3">
+                                <div className={`w-2 h-2 rounded-full ${isPillarActive('marketing') ? 'bg-indigo-500 shadow-[0_0_8px_#6366f1]' : 'bg-slate-600'}`}></div>
+                                <div className={`font-bold text-sm ${isPillarActive('marketing') ? 'text-white' : 'text-slate-400'}`}>Marketing</div>
+                            </div>
+                            <ul className="space-y-2">
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Brand Health</li>
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Events & PR</li>
+                                <li className={`text-[10px] border-l pl-2 font-bold transition-colors ${isPillarActive('marketing') ? 'text-white border-indigo-500' : 'text-slate-500 border-slate-700'}`}>Case Studies</li>
+                            </ul>
+                        </div>
+
+                        {/* 5. LEGAL */}
+                         <div className={`p-4 rounded border transition-all duration-300 bg-slate-900/50 border-slate-800 opacity-100`}>
+                            <div className="flex items-center gap-2 mb-3">
+                                <div className="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <div className="font-bold text-sm text-slate-400">Legal</div>
+                            </div>
+                            <ul className="space-y-2">
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Risk Mgmt</li>
+                                <li className="text-[10px] border-l border-slate-700 pl-2">Compliance</li>
+                                <li className="text-[10px] border-l border-slate-700 pl-2">IP Protection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>

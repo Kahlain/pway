@@ -18,7 +18,7 @@ function createLegendHTML() {
                         <span class="text-red-800 font-bold">Red Bold Functions</span>
                     </h4>
                     <p class="text-xs text-slate-600 leading-relaxed mb-2">
-                        <span class="text-red-800 font-bold">Marketing, Account Directors, Project Coordinators, Producers, and Account Management</span> are important functions, but some are missing and others need an updated view. You'll gain efficiency once the team defines these roles clearly and aligns how they work together.
+                        <span class="text-red-800 font-bold">Marketing, Account Management, Project Coordinators, and Producers</span> are important functions, but some are missing and others need an updated view. You'll gain efficiency once the team defines these roles clearly and aligns how they work together.
                     </p>
                 </div>
                 
@@ -49,8 +49,20 @@ function createLegendHTML() {
                 <div>
                     <h4 class="text-sm font-bold text-slate-700 mb-3">Account Services (AS) Function Split</h4>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        <span class="text-red-800 font-bold">AS (Account Services)</span> is too large as a function that is putting too much pressure on the support structure. Dividing the function into <span class="text-red-800 font-bold">Account Directors</span> (with skills to manage clients) vs <span class="text-red-800 font-bold">Project Coordinators</span> (with skills to manage projects) will bring more clarity and less friction.
+                        <span class="text-red-800 font-bold">AS (Account Services)</span> is too large as a function that is putting too much pressure on the support structure. Dividing the function into <span class="text-red-800 font-bold">Account Management</span> (with skills to manage clients) vs <span class="text-red-800 font-bold">Project Coordinators</span> (with skills to manage projects) will bring more clarity and less friction.
                     </p>
+                </div>
+                
+                <!-- Support Engine Documentation -->
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 mb-3">Support Engine</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                        <span class="text-slate-900 font-bold">(*) Support Engine Process in documentation stage</span>
+                    </p>
+                    <div class="space-y-2 text-xs text-slate-600">
+                        <p>Total Headcount: <span class="text-slate-900 font-medium">90</span> (Full time and Freelancers)</p>
+                        <p>Support Team Resources: <span class="text-slate-900 font-medium">8</span> (excl. Account Management)</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,7 +103,7 @@ function LegendComponent() {
                     React.createElement('span', {
                         key: 'highlight',
                         className: 'text-red-800 font-bold'
-                    }, 'Marketing, Account Directors, Project Coordinators, Producers, and Account Management'),
+                    }, 'Marketing, Account Management, Project Coordinators, and Producers'),
                     ' are important functions, but some are missing and others need an updated view. You\'ll gain efficiency once the team defines these roles clearly and aligns how they work together.'
                 ])
             ]),
@@ -179,13 +191,51 @@ function LegendComponent() {
                     React.createElement('span', {
                         key: 'ad',
                         className: 'text-red-800 font-bold'
-                    }, 'Account Directors'),
+                    }, 'Account Management'),
                     ' (with skills to manage clients) vs ',
                     React.createElement('span', {
                         key: 'pc',
                         className: 'text-red-800 font-bold'
                     }, 'Project Coordinators'),
                     ' (with skills to manage projects) will bring more clarity and less friction.'
+                ])
+            ]),
+            
+            // Support Engine Documentation
+            React.createElement('div', { key: 'support-engine' }, [
+                React.createElement('h4', {
+                    key: 'title',
+                    className: 'text-sm font-bold text-slate-700 mb-3'
+                }, 'Support Engine'),
+                React.createElement('p', {
+                    key: 'desc',
+                    className: 'text-xs text-slate-600 leading-relaxed mb-3'
+                }, [
+                    React.createElement('span', {
+                        key: 'note',
+                        className: 'text-slate-900 font-bold'
+                    }, '(*) Support Engine Process in documentation stage')
+                ]),
+                React.createElement('div', {
+                    key: 'metadata',
+                    className: 'space-y-2 text-xs text-slate-600'
+                }, [
+                    React.createElement('p', { key: 'headcount' }, [
+                        'Total Headcount: ',
+                        React.createElement('span', {
+                            key: 'value',
+                            className: 'text-slate-900 font-medium'
+                        }, '90'),
+                        ' (Full time and Freelancers)'
+                    ]),
+                    React.createElement('p', { key: 'resources' }, [
+                        'Support Team Resources: ',
+                        React.createElement('span', {
+                            key: 'value',
+                            className: 'text-slate-900 font-medium'
+                        }, '8'),
+                        ' (excl. Account Management)'
+                    ])
                 ])
             ])
         ])

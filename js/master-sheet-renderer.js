@@ -34,10 +34,10 @@ function getProcessListItemClass(status) {
  * Render a single stage card
  */
 function renderStage(stage) {
-    // Handle engine color for badge - DEFINE uses #84cc16, DELIVER uses slate-800, DYNAMIZE uses slate-500
+    // Handle engine color for badge - DEFINE uses #a0c928, DELIVER uses slate-800, DYNAMIZE uses slate-500
     let engineColorClass = '';
-    if (stage.engineColor === '#84cc16') {
-        engineColorClass = 'text-[#84cc16]';
+    if (stage.engineColor === '#a0c928') {
+        engineColorClass = 'text-[#a0c928]';
     } else if (stage.engineColor === '#231F20') {
         engineColorClass = 'text-slate-800';
     } else if (stage.engineColor === '#A6A8AB') {

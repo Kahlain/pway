@@ -1,0 +1,241 @@
+import React from 'react';
+
+const SupportEngineFooter = () => {
+  // Data derived from the "SUPPORT ENGINE – PROCESS OVERVIEW" text + New User Additions
+  const columns = [
+    {
+      id: 'account_mgmt',
+      title: 'Account Management',
+      color: 'bg-cyan-500',
+      borderColor: 'border-cyan-500/50',
+      textColor: 'text-cyan-400',
+      bgHover: 'group-hover:bg-cyan-500/10',
+      percentage: 50,
+      gatewayAction: 'Client Operations: Intake & Relationship Continuity',
+      items: [
+        'Client Relationships',
+        'Quarterly Business Reviews',
+        'Renewals & Upselling',
+        'Project Handoffs',
+        'Issue Escalation'
+      ]
+    },
+    {
+      id: 'finance',
+      title: 'Finance',
+      color: 'bg-green-500',
+      borderColor: 'border-green-500/50',
+      textColor: 'text-green-400',
+      bgHover: 'group-hover:bg-green-500/10',
+      percentage: 60,
+      gatewayAction: 'Financial Health: Stability & Profitability',
+      items: [
+        'Forecasting & **Budgeting (*)**',
+        'Reporting & Quarterly Reviews',
+        'Payroll & Cashflow',
+        'Billing & Contracts',
+        'Client Onboarding'
+      ]
+    },
+    {
+      id: 'hr',
+      title: 'HR (People)',
+      color: 'bg-indigo-500',
+      borderColor: 'border-indigo-500/50',
+      textColor: 'text-indigo-400',
+      bgHover: 'group-hover:bg-indigo-500/10',
+      percentage: 65,
+      gatewayAction: 'Employee Lifecycle: Recruitment to Retention',
+      items: [
+        '**Onboarding (*)** & Offboarding',
+        'Recruiting & Promotion',
+        'Performance Management',
+        'Training & Development',
+        'Employee Engagement'
+      ]
+    },
+    {
+      id: 'it',
+      title: 'IT',
+      color: 'bg-slate-400',
+      borderColor: 'border-slate-500/50',
+      textColor: 'text-slate-300',
+      bgHover: 'group-hover:bg-slate-500/10',
+      percentage: 50,
+      gatewayAction: 'Infrastructure: Assets, Support & Security',
+      items: [
+        'Tech & **Font Purchasing (*)**',
+        'Troubleshooting & Support',
+        'High-level Tech Projects',
+        'Staff Training',
+        'Freelancer/Intern Setup',
+        'Security and Infrastructure'
+      ]
+    },
+    {
+      id: 'marketing',
+      title: 'Marketing',
+      color: 'bg-purple-500',
+      borderColor: 'border-purple-500/50',
+      textColor: 'text-purple-400',
+      bgHover: 'group-hover:bg-purple-500/10',
+      percentage: 35,
+      gatewayAction: 'Brand Operations: Visibility & Asset Management',
+      items: [
+        'PR & Blog',
+        'Newsletters',
+        'Events Management',
+        'Website Maintenance',
+        'Templates & Assets'
+      ]
+    },
+    {
+      id: 'ceo',
+      title: 'CEO Office',
+      color: 'bg-amber-500',
+      borderColor: 'border-amber-500/50',
+      textColor: 'text-amber-400',
+      bgHover: 'group-hover:bg-amber-500/10',
+      // No percentage for CEO
+      gatewayAction: 'Vision & Alignment: Strategy to Execution',
+      items: [
+        'Board Relations',
+        'Investor Reporting',
+        'Strategic Initiatives',
+        'Internal Communications',
+        'Executive Support'
+      ]
+    }
+  ];
+
+  // Helper to render text with bold markers **text**
+  const renderItemText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={index} className="text-white font-bold">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  return (
+    <div className="w-full bg-[#0B0F19] text-slate-300 p-8 font-sans overflow-hidden">
+      
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center gap-4">
+          <div className="bg-slate-200 text-[#0B0F19] px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-sm">
+            The Support Engine (SOCLE)
+          </div>
+          <div className="h-[1px] bg-slate-800 flex-grow"></div>
+        </div>
+        <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-2 ml-1 font-mono leading-relaxed">
+          We are the engine of stability and growth. We drive Excellence and deliver the promise through Consistent processes and shared Accountability, ensuring the business scales without friction or unnecessary complexity
+        </p>
+      </div>
+
+      {/* Main Grid Container */}
+      <div className="relative rounded-xl border border-slate-800 bg-[#0F1322] overflow-hidden">
+        
+        {/* Background Grid Pattern */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" 
+             style={{
+               backgroundImage: `linear-gradient(#2d3748 1px, transparent 1px), linear-gradient(90deg, #2d3748 1px, transparent 1px)`,
+               backgroundSize: '40px 40px'
+             }}>
+        </div>
+
+        {/* Columns Wrapper - Adjusted for 6 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 relative z-10 divide-y md:divide-y-0 md:divide-x divide-slate-800/50">
+          
+          {columns.map((col) => (
+            <div key={col.id} className="group relative p-6 transition-all duration-300 hover:bg-slate-800/30 flex flex-col h-full">
+              
+              {/* Column Header */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className={`w-2.5 h-2.5 rounded-full ${col.color} shadow-[0_0_8px_rgba(255,255,255,0.3)]`}></div>
+                <div>
+                  <h3 className="font-bold text-slate-100 text-lg tracking-wide">{col.title}</h3>
+                  {/* Lead line removed */}
+                </div>
+              </div>
+
+              {/* Gateway Action Box */}
+              <div className={`mb-6 p-4 rounded-lg border ${col.borderColor} bg-slate-900/50 backdrop-blur-sm relative overflow-hidden transition-all duration-300 ${col.bgHover}`}>
+                {/* Accent glow inside box */}
+                <div className={`absolute top-0 left-0 w-1 h-full ${col.color}`}></div>
+                
+                <p className={`text-[10px] uppercase font-bold tracking-widest mb-2 ${col.textColor} opacity-80`}>
+                  Gateway Action
+                </p>
+                <p className="text-sm font-semibold text-white leading-snug">
+                  {col.gatewayAction}
+                </p>
+              </div>
+
+              {/* Process Documentation Progress Bar with Tooltip */}
+              {col.percentage !== undefined && (
+                <div className="mb-6 relative group/tooltip">
+                  <div className="flex justify-between items-center mb-1 cursor-help">
+                    <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500 border-b border-dashed border-slate-700 group-hover/tooltip:border-slate-400 transition-colors">
+                      Documentation Standard
+                    </p>
+                    <p className="text-xs font-bold text-slate-300">
+                      {col.percentage}%
+                    </p>
+                  </div>
+                  
+                  {/* Tooltip Content */}
+                  <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 border border-slate-700 text-slate-300 text-[10px] rounded shadow-xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
+                    The required % of documented tasks in that process
+                    {/* Tooltip Arrow */}
+                    <div className="absolute top-full left-4 -mt-[1px] border-4 border-transparent border-t-slate-700"></div>
+                  </div>
+
+                  <div className="w-full h-1.5 bg-slate-800/50 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full ${col.color} transition-all duration-500 ease-in-out`}
+                      style={{ width: `${col.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+
+              {/* List Items */}
+              <ul className="space-y-3 mt-auto">
+                {col.items.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
+                    <div className="w-[1px] h-4 bg-slate-700 mt-1 shrink-0"></div>
+                    <span className="leading-snug">{renderItemText(item)}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Hover Effect Border Bottom */}
+              <div className={`absolute bottom-0 left-0 w-full h-[2px] ${col.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer Meta Data */}
+      <div className="flex flex-row flex-wrap justify-between items-center mt-4 pt-4 border-t border-slate-800/50 text-[11px] text-slate-500">
+        <div className="flex items-center gap-4">
+          <p>Total Headcount: <span className="text-slate-300 font-medium">90</span></p>
+          <div className="h-3 w-[1px] bg-slate-800"></div>
+          <p>
+            Support Team Resources: <span className="text-slate-300 font-medium">8</span> <span className="text-slate-600 ml-1">(excl. Account Management)</span>
+          </p>
+        </div>
+        <p className="text-slate-600 italic">(*) Process in documentation stage</p>
+      </div>
+    </div>
+  );
+};
+
+export default SupportEngineFooter;

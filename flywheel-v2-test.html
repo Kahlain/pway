@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>The Pigeon Way - The Flywheel v 1.7</title>
+    <title>The Pigeon Way - Flywheel V2 (Test)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -55,7 +55,6 @@
     <script src="js/auth.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/highlight-text.js"></script>
-    <script src="js/legend.js?v=2"></script>
     <script src="js/ops-sheet-v2-mapper.js"></script>
     
     <!-- Initialize navigation and authentication -->
@@ -76,7 +75,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const navContainer = document.getElementById('navigation-container');
             if (navContainer) {
-                navContainer.innerHTML = createNavigation('flying-wheel');
+                navContainer.innerHTML = createNavigation('flywheel-v2-test');
             }
         });
     </script>
@@ -209,7 +208,8 @@
                     percentage: 50,
                     gatewayAction: 'Client touch point and coordination',
                     items: [
-                        '**New Client Onboarding (*)**',
+                        'Client Relationships',
+                        '**New Client Onboarding**',
                         'Quarterly Business Reviews',
                         'Renewals & Upselling',
                         'Project Handoffs',
@@ -251,7 +251,7 @@
                     percentage: 50,
                     gatewayAction: 'Infrastructure: Assets, Support & Security',
                     items: [
-                        '**Font Purchasing (*)**',
+                        '**Font Purchasing** (*)',
                         'Troubleshooting & Support',
                         'High-level Tech Projects',
                         'Staff Training',
@@ -710,9 +710,6 @@
                             gatewayActions={activeStage?.gateway || {}}
                         />
                     </div>
-
-                    {/* Legend */}
-                    {typeof window.LegendComponent !== 'undefined' && React.createElement(window.LegendComponent)}
 
                     {/* Video Card */}
                     <div className="mt-8 bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">

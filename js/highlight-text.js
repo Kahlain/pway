@@ -6,7 +6,7 @@
 
 const HIGHLIGHT_TERMS = [
     "Marketing",
-    "Account Directors (AS)",
+    "Account Management",
     "Producers",
     "Project Coordinators",
     "Account Management"

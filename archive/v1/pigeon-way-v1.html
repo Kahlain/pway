@@ -73,17 +73,12 @@
 
     <script>
         // Check authentication before loading page
-        // If authenticated, redirect to flywheel (homepage)
-        if (typeof isAuthenticated === 'function' && isAuthenticated()) {
-            window.location.href = 'pigeon-way.html';
-        } else if (typeof requireAuth === 'function') {
+        if (typeof requireAuth === 'function') {
             requireAuth('welcome.html');
         } else {
             // Wait for auth.js to load
             window.addEventListener('load', function() {
-                if (typeof isAuthenticated === 'function' && isAuthenticated()) {
-                    window.location.href = 'pigeon-way.html';
-                } else if (typeof requireAuth === 'function') {
+                if (typeof requireAuth === 'function') {
                     requireAuth('welcome.html');
                 }
             });
@@ -109,7 +104,8 @@
             useEffect(() => {
                 async function loadStages() {
                     try {
-                        const response = await fetch('data/stages-data.json');
+                        // Add cache-busting parameter to ensure fresh data
+                        const response = await fetch('data/stages-data.json?v=' + Date.now());
                         const data = await response.json();
                         setStages(data.stages);
                         setIsLoading(false);
@@ -306,6 +302,40 @@
                     {/* Legend Footer */}
                     <div className="mt-12">
                         <LegendComponent />
+                    </div>
+
+                    {/* Video Card */}
+                    <div className="mt-8 bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 serif">
+                            The Flywheel Concept from GOOD TO GREAT - In Just 2 Minutes
+                        </h3>
+                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                            <iframe
+                                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                src="https://www.youtube.com/embed/lUOe4GwPyFM"
+                                title="The Flywheel Concept from GOOD TO GREAT - In Just 2 Minutes"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    </div>
+
+                    {/* Second Video Card */}
+                    <div className="mt-8 bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 serif">
+                            The Flywheel Concept That Will Change Your Business - In Just 24 Minutes
+                        </h3>
+                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                            <iframe
+                                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                src="https://www.youtube.com/embed/drjzFJ2ZQu8"
+                                title="The Flywheel Concept That Will Change Your Business - In Just 24 Minutes"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
                     </div>
 
                     {/* Footer */}

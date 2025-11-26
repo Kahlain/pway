@@ -1,8 +1,8 @@
 {
-  "version": "0.8",
+  "version": "1.7",
   "highlightTerms": [
     "Marketing",
-    "Account Directors (AS)",
+    "Account Management",
     "Producers",
     "Project Coordinators",
     "Account Management"
@@ -19,8 +19,8 @@
       "engine": "Growth Engine",
       "engineColor": "#D6407D",
       "people": {
-        "experts": "Sales Leads, Account Directors (AS)",
-        "coordinators": "Sales Leads, Account Directors (AS)"
+        "experts": "Sales Leads, Account Management",
+        "coordinators": "Sales Leads, Account Management"
       },
       "processes": [
         {
@@ -64,13 +64,13 @@
       "title": "DEFINE",
       "promise": "We seek the truth.",
       "description": "Our experts dig deep. We conduct the investigations needed to seek out the singular truth that powers your brand.",
-      "color": "#D8F098",
+      "color": "#a0c928",
       "textColor": "#1e293b",
-      "engine": "Growth Engine",
-      "engineColor": "#84cc16",
+      "engine": "Delivery Engine",
+      "engineColor": "#a0c928",
       "people": {
         "experts": "Strategists, Subject Matter Experts",
-        "coordinators": "Strategists, Account Directors (AS)"
+        "coordinators": "Strategists, Account Management"
       },
       "processes": [
         {
@@ -79,10 +79,6 @@
         },
         {
           "name": "Strategy Delivery",
-          "status": "active"
-        },
-        {
-          "name": "New Client Onboarding",
           "status": "active"
         }
       ],
@@ -124,7 +120,7 @@
       "engineColor": "#E98C38",
       "people": {
         "experts": "Creative Directors and Subject Matter Experts",
-        "coordinators": "Project Coordinators, Account Directors (AS) and Creative Directors"
+        "coordinators": "Project Coordinators, Account Management and Creative Directors"
       },
       "processes": [
         {
@@ -142,6 +138,10 @@
         {
           "name": "Creative Team Planning",
           "status": "merge"
+        },
+        {
+          "name": "Project Coordination",
+          "status": "todo"
         }
       ],
       "backProcess": [
@@ -182,7 +182,7 @@
       "engineColor": "#231F20",
       "people": {
         "experts": "Producers and Subject Matter Experts",
-        "coordinators": "Production Manager, Print and Digital Producers, Project Coordinators, Account Directors (AS)"
+        "coordinators": "Production Manager, Print and Digital Producers, Project Coordinators, Account Management"
       },
       "processes": [
         {
@@ -190,8 +190,12 @@
           "status": "merge"
         },
         {
-          "name": "Production",
+          "name": "Production delivery",
           "status": "active"
+        },
+        {
+          "name": "Production coordination and compliance",
+          "status": "todo"
         }
       ],
       "backProcess": [
@@ -233,7 +237,7 @@
       "engineColor": "#A6A8AB",
       "people": {
         "experts": "Subject Matter Experts and Executive Leaders",
-        "coordinators": "Strategists, Sales Leads, Account Directors"
+        "coordinators": "Strategists, Sales Leads, Account Management"
       },
       "processes": [
         {
